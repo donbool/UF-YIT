@@ -5,18 +5,15 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Login from "./Login";
 import Register from "./Register";
-import Dashboard from "./Admin/AdminDashboard";
+import Dashboard from "./Dashboard";
 import "./Login.css";
-import AdminDashboard from "./Admin/AdminDashboard";
-
-//rn index.js is only goin to admin dashboard
 
 ReactDOM.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/admin/admindashboard" element={<AdminDashboard />} />
+      <Route path="/dashboard" element={<Dashboard />} />
     </Routes>
   </BrowserRouter>,
   document.getElementById("root")
