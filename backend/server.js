@@ -114,7 +114,6 @@ app.post("/login", async (req, res) => {
 
 });
 
-
 /* register api */
 app.post("/register", async (req, res) => {
   try {
@@ -128,11 +127,11 @@ app.post("/register", async (req, res) => {
 
           let User = new user({
             username: req.body.username,
-            password: req.body.password,
+            password: hashedPassword,
             role: req.body.role,
-	          fullName: req.body.fullName,
+            fullName: req.body.fullName,
             project: req.body.project
-
+          
           });
           User.save((err, data) => {
             if (err) {
@@ -170,6 +169,7 @@ app.post("/register", async (req, res) => {
     });
   }
 });
+
 
 function checkUserAndGenerateToken(data, req, res) {
   jwt.sign({ user: data.username, id: data._id }, 'shhhhh11111', { expiresIn: '1d' }, (err, token) => {
