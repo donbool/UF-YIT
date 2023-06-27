@@ -75,13 +75,14 @@ app.get("/", (req, res) => {
 });
 
 /* login api */
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
   try {
     if (req.body && req.body.username && req.body.password) {
-      user.find({ username: req.body.username }, (err, data) => {
+      user.find({ username: req.body.username }, async (err, data) => {
         if (data.length > 0) {
 
-          if (bcrypt.compareSync(data[0].password, req.body.password)) {
+          let comparison = await bcrypt.compare(req.body.password, data[0].password);
+          if (comparison) {
             checkUserAndGenerateToken(data[0], req, res);
           } else {
 
@@ -113,18 +114,21 @@ app.post("/login", (req, res) => {
 
 });
 
+
 /* register api */
-app.post("/register", (req, res) => {
+app.post("/register", async (req, res) => {
   try {
     if (req.body && req.body.username && req.body.password) {
 
-      user.find({ username: req.body.username }, (err, data) => {
+      user.find({ username: req.body.username }, async (err, data) => {
 
         if (data.length == 0) {
 
+          let hashedPassword = await bcrypt.hash(req.body.password, 10);
+
           let User = new user({
             username: req.body.username,
-            password: req.body.password
+            password: hashedPassword
           });
           User.save((err, data) => {
             if (err) {
