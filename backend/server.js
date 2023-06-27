@@ -108,6 +108,7 @@ app.post("/login", (req, res) => {
     res.status(400).json({
       errorMessage: 'Something went wrong!',
       status: false
+      
     });
   }
 
