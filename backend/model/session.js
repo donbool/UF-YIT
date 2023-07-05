@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-productSchema = new Schema( {
+sessionSchema = new Schema( {
 	name: String,
 	comments: String,
 	taskAssignment: String,
@@ -15,6 +15,6 @@ productSchema = new Schema( {
 	is_delete: { type: Boolean, default: false },
 	date : { type : Date, default: Date.now }
 }),
-product = mongoose.model('product', productSchema);
+session = mongoose.model('session', sessionSchema);
 
-module.exports = product;
+module.exports = session;

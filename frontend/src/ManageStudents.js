@@ -25,7 +25,7 @@ class Dashboard extends Component {
       file: '',
       page: 1,
       search: '',
-      products: [],
+      sessions: [],
       pages: 0,
       loading: false,
       displayStudents: false,
@@ -95,19 +95,19 @@ class Dashboard extends Component {
         'token': this.state.token
       }
     }).then((res) => {
-      this.setState({ loading: false, products: res.data.products, pages: res.data.pages });
+      this.setState({ loading: false, sessions: res.data.sessions, pages: res.data.pages });
     }).catch((err) => {
       swal({
         text: err.response.data.errorMessage,
         icon: "error",
         type: "error"
       });
-      this.setState({ loading: false, products: [], pages: 0 });
+      this.setState({ loading: false, sessions: [], pages: 0 });
     });
   }
 
   deleteSession = (id) => {
-    axios.post('http://localhost:2000/delete-product', {
+    axios.post('http://localhost:2000/delete-session', {
       id: id
     }, {
       headers: {
@@ -485,7 +485,7 @@ class Dashboard extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.state.products.map((row) => (
+              {this.state.sessions.map((row) => (
                 <TableRow key={row.name}>
                   <TableCell align="center" component="th" scope="row">
                     {row.name}

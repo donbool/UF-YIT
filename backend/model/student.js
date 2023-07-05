@@ -1,13 +1,13 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-productSchema = new Schema( {
+studentSchema = new Schema( {
 	name: String,
 	tutor: String,
     grade: String,
     averageMark: Number,
 	date : { type : Date, default: Date.now }
 }),
-student = mongoose.model('student', productSchema);
+student = mongoose.model('student', studentSchema);
 
-module.exports = product;
+module.exports = student;

@@ -25,7 +25,7 @@ class Dashboard extends Component {
       fileName: '',
       page: 1,
       search: '',
-      products: [],
+      sessions: [],
       pages: 0,
       loading: false
     };
@@ -52,24 +52,24 @@ class Dashboard extends Component {
     if (this.state.search) {
       data = `${data}&search=${this.state.search}`;
     }
-    axios.get(`http://localhost:2000/get-product${data}`, {
+    axios.get(`http://localhost:2000/get-session${data}`, {
       headers: {
         'token': this.state.token
       }
     }).then((res) => {
-      this.setState({ loading: false, products: res.data.products, pages: res.data.pages });
+      this.setState({ loading: false, sessions: res.data.sessions, pages: res.data.pages });
     }).catch((err) => {
       swal({
         text: err.response.data.errorMessage,
         icon: "error",
         type: "error"
       });
-      this.setState({ loading: false, products: [], pages: 0 },()=>{});
+      this.setState({ loading: false, sessions: [], pages: 0 },()=>{});
     });
   }
 
   deleteSession = (id) => {
-    axios.post('http://localhost:2000/delete-product', {
+    axios.post('http://localhost:2000/delete-session', {
       id: id
     }, {
       headers: {
@@ -129,7 +129,7 @@ class Dashboard extends Component {
     file.append('discount', this.state.discount);
     file.append('price', this.state.price);
 
-    axios.post('http://localhost:2000/add-product', file, {
+    axios.post('http://localhost:2000/add-session', file, {
       headers: {
         'content-type': 'multipart/form-data',
         'token': this.state.token
@@ -167,7 +167,7 @@ class Dashboard extends Component {
     file.append('discount', this.state.discount);
     file.append('price', this.state.price);
 
-    axios.post('http://localhost:2000/update-product', file, {
+    axios.post('http://localhost:2000/update-session', file, {
       headers: {
         'content-type': 'multipart/form-data',
         'token': this.state.token
@@ -436,7 +436,7 @@ class Dashboard extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.state.products.map((row) => (
+              {this.state.sessions.map((row) => (
                 <TableRow key={row.name}>
                   <TableCell align="center" component="th" scope="row">
                     {row.name}
