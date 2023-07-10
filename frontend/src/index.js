@@ -8,9 +8,9 @@ import StudentDashboard from "./Student/StudentDashboard";
 import TutorDashboard from "./Tutor/TutorDashboard";
 import AdminDashboard from "./Admin/AdminDashboard";
 import ManageProfiles from "./Admin/ManageProfiles";
-import AdminWelcomePage from "./Admin/AdminWelcomePage"; // Import AdminWelcomePage
-import TutorWelcomePage from "./Tutor/TutorWelcomePage"; // Import TutorWelcomePage
-import StudentWelcomePage from "./Student/StudentWelcomePage"; // Import StudentWelcomePage
+import AdminWelcomePage from "./Admin/AdminHome"; // Import AdminWelcomePage
+import TutorWelcomePage from "./Tutor/TutorHome"; // Import TutorWelcomePage
+import StudentWelcomePage from "./Student/StudentHome"; // Import StudentWelcomePage
 import ManageStudent from "./Admin/ManageStudents";
 import "./Login.css";
 
