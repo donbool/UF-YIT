@@ -80,7 +80,6 @@ const styles = createStyles({
 const Header = ({ logo, title, navigate, classes, logOut }) => {
   return (
     <div className={classes.header}>
-      <img src={logo} alt="Logo" className={classes.logo} />
       <Typography variant="h4" className={classes.title}>
         {title}
       </Typography>
@@ -177,38 +176,41 @@ class Dashboard extends Component {
   };
 
   deleteSession = (id) => {
-    axios
-      .post(
-        'http://localhost:2000/delete-users',
-        {
-          id: id,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            token: this.state.token,
-          },
-        }
-      )
-      .then((res) => {
-        swal({
-          text: res.data.title,
-          icon: 'success',
-          type: 'success',
-        });
-
-        this.setState({ page: 1 }, () => {
-          this.pageChange(null, 1);
-        });
-      })
-      .catch((err) => {
-        swal({
-          text: err.response.data.errorMessage,
-          icon: 'error',
-          type: 'error',
-        });
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this session!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((confirmDelete) => {
+      if (confirmDelete) {
+    axios.post('http://localhost:2000/delete-product', {
+      id: id
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'token': this.state.token
+      }
+    }).then((res) => {
+      swal({
+        text: res.data.title,
+        icon: "success",
+        type: "success"
       });
-  };
+
+      this.setState({ page: 1 }, () => {
+        this.pageChange(null, 1);
+      });
+    }).catch((err) => {
+      swal({
+        text: err.response.data.errorMessage,
+        icon: "error",
+        type: "error"
+      });
+    });
+  }
+});
+  }
 
   pageChange = (e, page) => {
     this.setState({ page: page }, () => {
@@ -305,13 +307,11 @@ class Dashboard extends Component {
     <div className={classes.container}>
       {this.state.loading && <LinearProgress size={40} />}
       <div className={classes.header}>
-        <img src={logo} alt="Logo" className={classes.logo} />
         <Typography variant="h5" align="center" style={{ flex: 1 }}>
           Profile Management
         </Typography>
         <div className={classes.header} style={{ justifyContent: 'center' }}>
 </div>
-
 
         <div className={classes.buttonContainer}>
           <Button
@@ -321,7 +321,7 @@ class Dashboard extends Component {
             size="small"
             onClick={() => this.props.navigate('/register')}
           >
-            Register
+            REGISTER
           </Button>
 
           <Button
@@ -331,7 +331,7 @@ class Dashboard extends Component {
             size="small"
             onClick={() => this.props.navigate('/WelcomePage')}
           >
-            Dashboard
+            HOME
           </Button>
 
           <Button
@@ -341,7 +341,7 @@ class Dashboard extends Component {
             size="small"
             onClick={this.logOut}
           >
-            Log Out
+            LOG OUT
           </Button>
         </div>
       </div>
