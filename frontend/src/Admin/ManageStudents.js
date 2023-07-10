@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import {
   Button, TextField, Dialog, DialogActions, LinearProgress,
   DialogTitle, DialogContent, TableBody, Table,
-  TableContainer, TableHead, TableRow, TableCell
+  TableContainer, TableHead, TableRow, TableCell, InputLabel, Select, MenuItem
 } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import swal from 'sweetalert';
-import { withRouter } from './utils';
+import { withRouter } from '../utils';
 const axios = require('axios');
 
 class Dashboard extends Component {
@@ -18,23 +18,23 @@ class Dashboard extends Component {
       openSessionEditModal: false,
       id: '',
       name: '',
-      desc: '',
-      price: '',
-      discount: '',
+      students: [],
+      tutor: '',
+      tutors: [],
+      grade: '',
       file: '',
-      fileName: '',
       page: 1,
       search: '',
       products: [],
       pages: 0,
-      loading: false
+      loading: false,
+      displayStudents: false,
     };
   }
 
   componentDidMount = () => {
     let token = localStorage.getItem('token');
     if (!token) {
-      // this.props.history.push('/login');
       this.props.navigate("/login");
     } else {
       this.setState({ token: token }, () => {
@@ -43,8 +43,46 @@ class Dashboard extends Component {
     }
   }
 
+  getAllStudents = () => {
+    this.setState({ loading: true });
+
+    axios.get('http://localhost:2000/get-students', {
+      headers: {
+        'token': this.state.token
+      }
+    }).then((res) => {
+      this.setState({ loading: false, students: res.data.students.map(student => student.fullName) });
+    }).catch((err) => {
+      swal({
+        text: err.response.data.errorMessage,
+        icon: "error",
+        type: "error"
+      });
+      this.setState({ loading: false, students: [] });
+    });
+  }
+
+
+  getAllTutors = () => {
+    this.setState({ loading: true });
+
+    axios.get('http://localhost:2000/get-tutors', {
+      headers: {
+        'token': this.state.token
+      }
+    }).then((res) => {
+      this.setState({ loading: false, tutors: res.data.tutors.map(tutor => tutor.fullName) });
+    }).catch((err) => {
+      swal({
+        text: err.response.data.errorMessage,
+        icon: "error",
+        type: "error"
+      });
+      this.setState({ loading: false, tutors: [] });
+    });
+  }
+
   getSession = () => {
-    
     this.setState({ loading: true });
 
     let data = '?';
@@ -52,7 +90,7 @@ class Dashboard extends Component {
     if (this.state.search) {
       data = `${data}&search=${this.state.search}`;
     }
-    axios.get(`http://localhost:2000/get-product${data}`, {
+    axios.get(`http://localhost:2000/get-student${data}`, {
       headers: {
         'token': this.state.token
       }
@@ -64,7 +102,7 @@ class Dashboard extends Component {
         icon: "error",
         type: "error"
       });
-      this.setState({ loading: false, products: [], pages: 0 },()=>{});
+      this.setState({ loading: false, products: [], pages: 0 });
     });
   }
 
@@ -77,7 +115,6 @@ class Dashboard extends Component {
         'token': this.state.token
       }
     }).then((res) => {
-
       swal({
         text: res.data.title,
         icon: "success",
@@ -104,16 +141,15 @@ class Dashboard extends Component {
 
   logOut = () => {
     localStorage.setItem('token', null);
-    // this.props.history.push('/');
     this.props.navigate("/");
   }
 
   onChange = (e) => {
     if (e.target.files && e.target.files[0] && e.target.files[0].name) {
-      this.setState({ fileName: e.target.files[0].name }, () => { });
+      this.setState({ fileName: e.target.files[0].name });
     }
-    this.setState({ [e.target.name]: e.target.value }, () => { });
-    if (e.target.name == 'search') {
+    this.setState({ [e.target.name]: e.target.value });
+    if (e.target.name === 'search') {
       this.setState({ page: 1 }, () => {
         this.getSession();
       });
@@ -121,21 +157,17 @@ class Dashboard extends Component {
   };
 
   addSession = () => {
-    const fileInput = document.querySelector("#fileInput");
     const file = new FormData();
-    file.append('file', fileInput.files[0]);
     file.append('name', this.state.name);
-    file.append('desc', this.state.desc);
-    file.append('discount', this.state.discount);
-    file.append('price', this.state.price);
+    file.append('grade', this.state.grade);
+    file.append('tutor', this.state.tutor);
 
-    axios.post('http://localhost:2000/add-product', file, {
+    axios.post('http://localhost:2000/add-student', file, {
       headers: {
         'content-type': 'multipart/form-data',
         'token': this.state.token
       }
     }).then((res) => {
-
       swal({
         text: res.data.title,
         icon: "success",
@@ -143,7 +175,9 @@ class Dashboard extends Component {
       });
 
       this.handleSessionClose();
-      this.setState({ name: '', desc: '', discount: '', price: '', file: null, page: 1 }, () => {
+      this.setState({
+        name: '', tutor: '', grade: '', file: null, page: 1
+      }, () => {
         this.getSession();
       });
     }).catch((err) => {
@@ -158,22 +192,18 @@ class Dashboard extends Component {
   }
 
   updateSession = () => {
-    const fileInput = document.querySelector("#fileInput");
     const file = new FormData();
     file.append('id', this.state.id);
-    file.append('file', fileInput.files[0]);
-    file.append('name', this.state.name);
-    file.append('desc', this.state.desc);
-    file.append('discount', this.state.discount);
-    file.append('price', this.state.price);
+    file.append('grade', this.state.grade);
+    file.append('name', this.state.grade);
+    file.append('tutor', this.state.grade);
 
-    axios.post('http://localhost:2000/update-product', file, {
+    axios.post('http://localhost:2000/update-student', file, {
       headers: {
         'content-type': 'multipart/form-data',
         'token': this.state.token
       }
     }).then((res) => {
-
       swal({
         text: res.data.title,
         icon: "success",
@@ -181,7 +211,9 @@ class Dashboard extends Component {
       });
 
       this.handleSessionEditClose();
-      this.setState({ name: '', desc: '', discount: '', price: '', file: null }, () => {
+      this.setState({
+        name: '', grade: '', tutor: '', file: null
+      }, () => {
         this.getSession();
       });
     }).catch((err) => {
@@ -196,13 +228,14 @@ class Dashboard extends Component {
   }
 
   handleSessionOpen = () => {
+    this.getAllStudents();
+    this.getAllTutors();
     this.setState({
       openSessionModal: true,
       id: '',
       name: '',
-      desc: '',
-      price: '',
-      discount: '',
+      grade: '',
+      tutor: '',
       fileName: ''
     });
   };
@@ -216,10 +249,8 @@ class Dashboard extends Component {
       openSessionEditModal: true,
       id: data._id,
       name: data.name,
-      desc: data.desc,
-      price: data.price,
-      discount: data.discount,
-      fileName: data.image
+      tutor: data.tutor,
+      grade: data.grade,
     });
   };
 
@@ -228,11 +259,14 @@ class Dashboard extends Component {
   };
 
   render() {
+    const days = Array.from({ length: 31 }, (_, i) => i + 1);
+    const months = Array.from({ length: 12 }, (_, i) => i + 1);
+    const years = Array.from({ length: 5 }, (_, i) => i + 2023);
     return (
       <div>
         {this.state.loading && <LinearProgress size={40} />}
         <div>
-          <h2>Dashboard</h2>
+          <h1 style={{ color: '#07EBB8' }}>Student Management</h1>
           <Button
             className="button_style"
             variant="contained"
@@ -240,11 +274,23 @@ class Dashboard extends Component {
             size="small"
             onClick={this.handleSessionOpen}
           >
-            Add Session
+            Register Student
           </Button>
+
           <Button
             className="button_style"
             variant="contained"
+            color="primary"
+            size="small"
+            onClick={() => this.props.navigate("/WelcomePage")}
+          >
+            Home
+          </Button>
+
+          <Button
+            className="button_style"
+            variant="contained"
+            color="secondary"
             size="small"
             onClick={this.logOut}
           >
@@ -261,62 +307,55 @@ class Dashboard extends Component {
         >
           <DialogTitle id="alert-dialog-title">Edit Session</DialogTitle>
           <DialogContent>
-            <TextField
-              id="standard-basic"
-              type="text"
-              autoComplete="off"
-              name="name"
-              value={this.state.name}
+            <InputLabel>Select Grade</InputLabel>
+            <Select
+              style={{ minWidth: '200px' }}
+              value={this.state.grade}
               onChange={this.onChange}
-              placeholder="Session Name"
-              required
-            /><br />
-            <TextField
-              id="standard-basic"
-              type="text"
-              autoComplete="off"
-              name="desc"
-              value={this.state.desc}
+              inputProps={{
+                name: 'grade',
+              }}
+            >
+              <MenuItem value="Grade1">Grade 1</MenuItem>
+              <MenuItem value="Grade2">Grade 2</MenuItem>
+              <MenuItem value="Grade3">Grade 3</MenuItem>
+              <MenuItem value="Grade4">Grade 4</MenuItem>
+              <MenuItem value="Grade5">Grade 5</MenuItem>
+              <MenuItem value="Grade6">Grade 6</MenuItem>
+              <MenuItem value="Grade7">Grade 7</MenuItem>
+              <MenuItem value="Grade8">Grade 8</MenuItem>
+              <MenuItem value="Grade9">Grade 9</MenuItem>
+              <MenuItem value="Grade10">Grade 10</MenuItem>
+              <MenuItem value="Grade11">Grade 11</MenuItem>
+              <MenuItem value="Grade12">Grade 12</MenuItem>
+            </Select>
+            <br />
+            <br />
+            <InputLabel>
+              {this.state.tutor ? this.state.tutor : "Assign Tutor"}
+            </InputLabel>
+            <Select
+              style={{ minWidth: '200px' }}
+              value={this.state.tutor}
               onChange={this.onChange}
-              placeholder="Description"
-              required
-            /><br />
-            <TextField
-              id="standard-basic"
-              type="number"
-              autoComplete="off"
-              name="price"
-              value={this.state.price}
-              onChange={this.onChange}
-              placeholder="Price"
-              required
-            /><br />
-            <TextField
-              id="standard-basic"
-              type="number"
-              autoComplete="off"
-              name="discount"
-              value={this.state.discount}
-              onChange={this.onChange}
-              placeholder="Discount"
-              required
-            /><br /><br />
-            <Button
-              variant="contained"
-              component="label"
-            > Upload
-            <input
-                type="file"
-                accept="image/*"
-                name="file"
-                value={this.state.file}
-                onChange={this.onChange}
-                id="fileInput"
-                placeholder="File"
-                hidden
-              />
-            </Button>&nbsp;
-            {this.state.fileName}
+              inputProps={{
+                name: 'tutor',
+              }}
+            >
+              <MenuItem value="" disabled>
+                Tutor Name
+              </MenuItem>
+              {this.state.tutors.map((tutor, index) => (
+                <MenuItem key={index} value={tutor}>
+                  {tutor}
+                </MenuItem>
+              ))}
+            </Select>
+
+            <br />
+            <br />
+           
+          
           </DialogContent>
 
           <DialogActions>
@@ -324,79 +363,92 @@ class Dashboard extends Component {
               Cancel
             </Button>
             <Button
-              disabled={this.state.name == '' || this.state.desc == '' || this.state.discount == '' || this.state.price == ''}
+              disabled={this.state.name === '' || this.state.comments === '' || this.state.taskAssignment === '' || this.state.averageMark === '' || this.state.sessionDay === '' || this.state.sessionMonth === '' || this.state.sessionYear === ''}
               onClick={(e) => this.updateSession()} color="primary" autoFocus>
               Edit Session
             </Button>
           </DialogActions>
         </Dialog>
 
-        {/* Add Session */}
+        {/* Register Student */}
         <Dialog
           open={this.state.openSessionModal}
           onClose={this.handleSessionClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">Add Session</DialogTitle>
+          <DialogTitle id="alert-dialog-title">Register Student</DialogTitle>
           <DialogContent>
-            <TextField
-              id="standard-basic"
-              type="text"
-              autoComplete="off"
-              name="name"
+            <InputLabel>
+              {this.state.name ? this.state.name : "Select a Student"}
+            </InputLabel>
+            <Select
+              style={{ minWidth: '200px' }}
               value={this.state.name}
               onChange={this.onChange}
-              placeholder="Student Name"
-              required
-            /><br />
-            <TextField
-              id="standard-basic"
-              type="text"
-              autoComplete="off"
-              name="desc"
-              value={this.state.desc}
+              inputProps={{
+                name: 'name',
+              }}
+            >
+              <MenuItem value="" disabled>
+                Student Name
+              </MenuItem>
+              {this.state.students.map((student, index) => (
+                <MenuItem key={index} value={student}>
+                  {student}
+                </MenuItem>
+              ))}
+            </Select>
+            <br />
+            <br />
+            <InputLabel>
+              {this.state.tutor ? this.state.tutor : "Assign Tutor"}
+            </InputLabel>
+            <Select
+              style={{ minWidth: '200px' }}
+              value={this.state.tutor}
               onChange={this.onChange}
-              placeholder="Description"
-              required
-            /><br />
-            <TextField
-              id="standard-basic"
-              type="number"
-              autoComplete="off"
-              name="price"
-              value={this.state.price}
+              inputProps={{
+                name: 'tutor',
+              }}
+            >
+              <MenuItem value="" disabled>
+                Tutor Name
+              </MenuItem>
+              {this.state.tutors.map((tutor, index) => (
+                <MenuItem key={index} value={tutor}>
+                  {tutor}
+                </MenuItem>
+              ))}
+            </Select>
+
+            <br />
+            <br />
+            <InputLabel>Select Grade</InputLabel>
+            <Select
+              style={{ minWidth: '200px' }}
+              value={this.state.grade}
               onChange={this.onChange}
-              placeholder="Price"
-              required
-            /><br />
-            <TextField
-              id="standard-basic"
-              type="number"
-              autoComplete="off"
-              name="discount"
-              value={this.state.discount}
-              onChange={this.onChange}
-              placeholder="Discount"
-              required
-            /><br /><br />
-            <Button
-              variant="contained"
-              component="label"
-            > Upload
-            <input
-                type="file"
-                accept="image/*"
-                name="file"
-                value={this.state.file}
-                onChange={this.onChange}
-                id="fileInput"
-                placeholder="File"
-                hidden
-                required
-              />
-            </Button>&nbsp;
-            {this.state.fileName}
+              inputProps={{
+                name: 'grade',
+              }}
+            >
+             <MenuItem value="Grade1">Grade 1</MenuItem>
+              <MenuItem value="Grade2">Grade 2</MenuItem>
+              <MenuItem value="Grade3">Grade 3</MenuItem>
+              <MenuItem value="Grade4">Grade 4</MenuItem>
+              <MenuItem value="Grade5">Grade 5</MenuItem>
+              <MenuItem value="Grade6">Grade 6</MenuItem>
+              <MenuItem value="Grade7">Grade 7</MenuItem>
+              <MenuItem value="Grade8">Grade 8</MenuItem>
+              <MenuItem value="Grade9">Grade 9</MenuItem>
+              <MenuItem value="Grade10">Grade 10</MenuItem>
+              <MenuItem value="Grade11">Grade 11</MenuItem>
+              <MenuItem value="Grade12">Grade 12</MenuItem>
+            </Select>
+            <br />
+            <br />
+            
           </DialogContent>
 
           <DialogActions>
@@ -404,9 +456,9 @@ class Dashboard extends Component {
               Cancel
             </Button>
             <Button
-              disabled={this.state.name == '' || this.state.desc == '' || this.state.discount == '' || this.state.price == '' || this.state.file == null}
+              disabled={this.state.name === '' || this.state.comments === '' || this.state.taskAssignment === '' || this.state.hours === '' || this.state.grade === '' || this.state.grade === ''}
               onClick={(e) => this.addSession()} color="primary" autoFocus>
-              Add Session
+              Register Student
             </Button>
           </DialogActions>
         </Dialog>
@@ -428,11 +480,8 @@ class Dashboard extends Component {
             <TableHead>
               <TableRow>
                 <TableCell align="center">Name</TableCell>
-                <TableCell align="center">Image</TableCell>
-                <TableCell align="center">Description</TableCell>
-                <TableCell align="center">Price</TableCell>
-                <TableCell align="center">Discount</TableCell>
-                <TableCell align="center">Action</TableCell>
+                <TableCell align="center">Grade</TableCell>
+                <TableCell align="center">Tutor</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -441,10 +490,9 @@ class Dashboard extends Component {
                   <TableCell align="center" component="th" scope="row">
                     {row.name}
                   </TableCell>
-                  <TableCell align="center"><img src={`http://localhost:2000/${row.image}`} width="70" height="70" /></TableCell>
-                  <TableCell align="center">{row.desc}</TableCell>
-                  <TableCell align="center">{row.price}</TableCell>
-                  <TableCell align="center">{row.discount}</TableCell>
+                  <TableCell align="center">{row.grade}</TableCell>
+                  <TableCell align="center">{row.tutor}</TableCell>
+                  
                   <TableCell align="center">
                     <Button
                       className="button_style"
@@ -454,7 +502,7 @@ class Dashboard extends Component {
                       onClick={(e) => this.handleSessionEditOpen(row)}
                     >
                       Edit
-                  </Button>
+                    </Button>
                     <Button
                       className="button_style"
                       variant="outlined"
@@ -463,7 +511,7 @@ class Dashboard extends Component {
                       onClick={(e) => this.deleteSession(row._id)}
                     >
                       Delete
-                  </Button>
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}

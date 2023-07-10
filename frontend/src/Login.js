@@ -13,7 +13,8 @@ class Login extends React.Component {
     super(props);
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      role: ''
     };
   }
 
@@ -21,14 +22,34 @@ class Login extends React.Component {
 
   login = () => {
     const pwd = bcrypt.hashSync(this.state.password, salt);
-
+  
     axios.post('http://localhost:2000/login', {
       username: this.state.username,
       password: pwd,
     }).then((res) => {
+      const role = res.data.role;
+      localStorage.setItem('role', res.data.role);
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user_id', res.data.id);
-      this.props.navigate("/WelcomePage");
+  
+      switch (role) {
+        case 'Admin':
+          this.props.navigate("/admin/welcome");
+          break;
+        case 'Tutor':
+          this.props.navigate("/tutor/welcome");
+          break;
+        case 'Student':
+          this.props.navigate("/student/welcome");
+          break;
+        default:
+          swal({
+            text: 'Invalid role: ' + role,
+            icon: "error",
+            type: "error"
+          });
+          break;
+      }
     }).catch((err) => {
       if (err.response && err.response.data && err.response.data.errorMessage) {
         swal({
@@ -39,6 +60,7 @@ class Login extends React.Component {
       }
     });
   }
+  
 
   render() {
     return (
@@ -70,6 +92,7 @@ class Login extends React.Component {
             placeholder="Password"
             required
           />
+          
           <br /><br />
           <Button
             className="button_style"

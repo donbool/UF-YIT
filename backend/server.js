@@ -169,7 +169,7 @@ app.post("/register", (req, res) => {
 });
 
 function checkUserAndGenerateToken(data, req, res) {
-  jwt.sign({ user: data.username, id: data._id }, 'shhhhh11111', { expiresIn: '1d' }, (err, token) => {
+  jwt.sign({ user: data.username, id: data._id, role: data.role}, 'shhhhh11111', { expiresIn: '1d' }, (err, token) => {
     if (err) {
       res.status(400).json({
         status: false,
@@ -179,6 +179,7 @@ function checkUserAndGenerateToken(data, req, res) {
       res.json({
         message: 'Login Successfully.',
         token: token,
+        role: data.role, // Include the role field in the response
         status: true
       });
     }
