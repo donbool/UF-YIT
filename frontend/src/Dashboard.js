@@ -42,6 +42,7 @@ class Dashboard extends Component {
       fileName: '',
       page: 1,
       search: '',
+      searchByTutor: '',
       products: [],
       tutor : '',
       pages: 0,
@@ -93,6 +94,9 @@ class Dashboard extends Component {
     data = `${data}page=${this.state.page}`;
     if (this.state.search) {
       data = `${data}&search=${this.state.search}`;
+    }
+    if (this.state.searchByTutor){
+      data = `${data}&searchByTutor=${this.state.searchByTutor}`;
     }
     axios.get(`http://localhost:2000/get-product${data}`, {
       headers: {
@@ -154,6 +158,10 @@ class Dashboard extends Component {
       this.setState({ name: value });
     } else if (e.target.files && e.target.files[0] && e.target.files[0].name) {
       this.setState({ fileName: e.target.files[0].name });
+    } else if (e.target.name === 'searchByTutor') {
+      this.setState({searchByTutor: e.target.value}, () => {
+        this.getSession();
+      })
     } else {
       this.setState({ [e.target.name]: e.target.value });
       if (e.target.name === 'search') {
@@ -422,7 +430,7 @@ class Dashboard extends Component {
 
             <br />
             <br />
-    <InputLabel>Hours Worked</InputLabel>
+    <InputLabel>Hours Logged</InputLabel>
 
             <TextField
               id="standard-basic"
@@ -550,7 +558,7 @@ class Dashboard extends Component {
             <br />
             
             
-    <InputLabel>Hours Worked</InputLabel>
+    <InputLabel>Hours Logged</InputLabel>
             <TextField
               id="standard-basic"
               type="number"
@@ -612,13 +620,23 @@ class Dashboard extends Component {
             placeholder="Search by student name"
             required
           />
+          <TextField
+            id="standard-basic"
+            type="search"
+            autoComplete="off"
+            name="searchByTutor"
+            value={this.state.searchByTutor}
+            onChange={this.onChange}
+            placeholder="Search by tutor"
+            required
+          />
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell align="center">Date</TableCell>
                 <TableCell align="center">Tutor</TableCell>
                 <TableCell align="center">Students</TableCell>
-                <TableCell align="center">Hours Worked</TableCell>
+                <TableCell align="center">Hours Logged</TableCell>
                 <TableCell align="center">Subjects</TableCell>
                 <TableCell align="center">Comments</TableCell>
                 <TableCell align="center">Action</TableCell>
