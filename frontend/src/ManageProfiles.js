@@ -328,6 +328,7 @@ class Dashboard extends Component {
               onChange={this.onChange}
               placeholder="Full Name"
               required
+              
             />
 
             <Select
