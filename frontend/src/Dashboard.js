@@ -617,6 +617,7 @@ class Dashboard extends Component {
               <TableRow>
                 <TableCell align="center">Date</TableCell>
                 <TableCell align="center">Tutor</TableCell>
+                <TableCell align="center">Students</TableCell>
                 <TableCell align="center">Hours Worked</TableCell>
                 <TableCell align="center">Subjects</TableCell>
                 <TableCell align="center">Comments</TableCell>
@@ -630,6 +631,8 @@ class Dashboard extends Component {
                     {`${row.sessionDay}-${row.sessionMonth}-${row.sessionYear}`}
                   </TableCell>
                   <TableCell align="center">{row.tutor}</TableCell>
+                  <TableCell align="center">{row.name.replace(/[\[\]"\s]/g, ' ').split(' ').join(' ')}</TableCell>
+
                   <TableCell align="center">{row.hours}</TableCell>
                   <TableCell align="center">{row.subject.replace(/[\[\]"\s]/g, '').split(',').join(', ')}</TableCell>
 

@@ -316,6 +316,7 @@ class Dashboard extends Component {
                 name: 'grade',
               }}
             >
+              <MenuItem value="Grade0">Grade R</MenuItem>
               <MenuItem value="Grade1">Grade 1</MenuItem>
               <MenuItem value="Grade2">Grade 2</MenuItem>
               <MenuItem value="Grade3">Grade 3</MenuItem>
@@ -433,7 +434,8 @@ class Dashboard extends Component {
                 name: 'grade',
               }}
             >
-             <MenuItem value="Grade1">Grade 1</MenuItem>
+              <MenuItem value="Grade0">Grade R</MenuItem>
+              <MenuItem value="Grade1">Grade 1</MenuItem>
               <MenuItem value="Grade2">Grade 2</MenuItem>
               <MenuItem value="Grade3">Grade 3</MenuItem>
               <MenuItem value="Grade4">Grade 4</MenuItem>

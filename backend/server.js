@@ -219,7 +219,7 @@ app.post("/add-product", upload.any(), (req, res) => {
         } else {
           res.status(200).json({
             status: true,
-            title: 'Product Added successfully.'
+            title: 'Session Added successfully.'
           });
         }
       });
@@ -419,7 +419,7 @@ app.get("/get-product", (req, res) => {
             if (data && data.length > 0) {
               res.status(200).json({
                 status: true,
-                title: 'Product retrived.',
+                title: 'Student retrived.',
                 products: data,
                 current_page: page,
                 total: count,
@@ -427,7 +427,7 @@ app.get("/get-product", (req, res) => {
               });
             } else {
               res.status(400).json({
-                errorMessage: 'There is no product!',
+                errorMessage: 'There is no student!',
                 status: false
               });
             }
