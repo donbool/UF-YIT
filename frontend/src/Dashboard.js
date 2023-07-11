@@ -111,6 +111,14 @@ class Dashboard extends Component {
   }
 
   deleteSession = (id) => {
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this session!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((confirmDelete) => {
+      if (confirmDelete) {
     axios.post('http://localhost:2000/delete-product', {
       id: id
     }, {
@@ -135,6 +143,8 @@ class Dashboard extends Component {
         type: "error"
       });
     });
+  }
+});
   }
 
   pageChange = (e, page) => {
@@ -163,8 +173,6 @@ class Dashboard extends Component {
       }
     }
   };
-
-  
 
   addSession = () => {
     const file = new FormData();
