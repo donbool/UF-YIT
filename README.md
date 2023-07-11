@@ -40,3 +40,6 @@ To run node server
 To run react frontend
 1. `cd frontend`
 2. `npm start`
+
+a .env file is also needed to connect to the database, it should start with: 
+MONGODB_URL=mongodb+srv://
