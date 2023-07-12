@@ -1,10 +1,12 @@
 import React from 'react';
-import { Typography, Paper, Card, Grid, IconButton } from '@material-ui/core';
+import { Typography, Card, Grid, IconButton } from '@material-ui/core';
 import { ExitToApp as LogoutIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
+import { useNavigate } from 'react-router-dom';  // import useNavigate
 import logo from './logo.png';
 
 const useStyles = makeStyles((theme) => ({
+  
   root: {
     marginTop: theme.spacing(3),
     padding: theme.spacing(3),
@@ -41,15 +43,21 @@ const useStyles = makeStyles((theme) => ({
 
 function SurveyForm() {
   const classes = useStyles();
-
+  const navigate = useNavigate();  // use useHistory hook
   const handleLogout = () => {
-    // Implement your logout logic here
+    localStorage.setItem('token', null);
+    navigate('/');
+  };
+
+  const navigateHomePage = () => {
+    localStorage.setItem('token', null);
+    navigate('/WelcomePage');
   };
 
   return (
     <Grid className={classes.root}>
       <Grid container className={classes.header}>
-        <img className={classes.logo} src={logo} alt="Logo" />
+        <img onClick={navigateHomePage} className={classes.logo} src={logo} alt="Logo" />
         <IconButton onClick={handleLogout}>
           <LogoutIcon style={{ color: '#000000' }}/>
         </IconButton>

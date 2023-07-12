@@ -14,37 +14,53 @@ import {
   TableRow,
   TableCell,
   InputLabel,
-  makeStyles,
-  createStyles,
   Select,
   MenuItem,
-  withStyles,
   Paper,
   Typography,
+  IconButton,
+  Grid,
+  Card,
 } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
+import { ExitToApp as LogoutIcon } from '@material-ui/icons';
+import { withStyles } from '@material-ui/core/styles';
 import swal from 'sweetalert';
-import { withRouter } from './utils';
 import axios from 'axios';
 import logo from './logo2.png';
+import { withRouter } from './utils';
 
-
-const styles = createStyles({
-  container: {
-    padding: '20px',
+const styles = (theme) => ({
+  root: {
+    marginTop: theme.spacing(3),
+    padding: theme.spacing(3),
+    backgroundColor: '#FFFFFF',
+    minHeight: '100vh',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
   },
   header: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: '10px',
+    marginBottom: theme.spacing(3),
   },
   logo: {
-    height: '80px',
+    maxHeight: '100px',
+    marginRight: '20px',
+    marginTop: '20px',
   },
   title: {
-    color: '#07EBB8',
-    margin: '0',
+    fontSize: '3rem',
+    fontWeight: 'bold',
+    background: '-webkit-linear-gradient(45deg, #00E1FF 30%, #00FF9F 90%)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    textAlign: 'center',
+    marginBottom: theme.spacing(3),
+  },
+  container: {
+    padding: '20px',
   },
   buttonContainer: {
     display: 'flex',
@@ -72,9 +88,11 @@ const styles = createStyles({
     display: 'flex',
     flexDirection: 'column',
     gap: '20px',
-  },
+  }
+  // Remainder of your style definitions go here.
 });
 
+// Class and other components below go here.
 
 // Header component
 const Header = ({ logo, title, navigate, classes, logOut }) => {
