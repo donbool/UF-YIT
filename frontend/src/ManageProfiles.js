@@ -308,8 +308,9 @@ class Dashboard extends Component {
       {this.state.loading && <LinearProgress size={40} />}
       <div className={classes.header}>
         <Typography variant="h5" align="center" style={{ flex: 1 }}>
-          Profile Management
+          Account Management
         </Typography>
+
         <div className={classes.header} style={{ justifyContent: 'center' }}>
 </div>
 
@@ -447,7 +448,7 @@ class Dashboard extends Component {
           name="search"
           value={this.state.search}
           onChange={this.onChange}
-          placeholder="Search by Full Name"
+          placeholder="Search by Name"
           required
           className={classes.searchField}
         />
@@ -473,24 +474,25 @@ class Dashboard extends Component {
                 <TableCell align="center">{row.password}</TableCell>
                 <TableCell align="center">{row.project}</TableCell>
                 <TableCell align="center">
-                  <Button
-                    className={classes.button}
-                    variant="outlined"
-                    color="primary"
-                    size="small"
-                    onClick={(e) => this.handleSessionEditOpen(row)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    className={classes.button}
-                    variant="outlined"
-                    color="secondary"
-                    size="small"
-                    onClick={(e) => this.deleteSession(row._id)}
-                  >
-                    Delete
-                  </Button>
+                <Button
+                  className={classes.button}
+                  variant="outlined"
+                  color="primary"
+                  size="small"
+                  style={{ marginRight: '10px' }}
+                  onClick={(e) => this.handleSessionEditOpen(row)}
+                >
+                  Edit
+                </Button>
+                <Button
+                  className={classes.button}
+                  variant="outlined"
+                  color="secondary"
+                  size="small"
+                  onClick={(e) => this.deleteSession(row._id)}
+                >
+                  Delete
+                </Button>
                 </TableCell>
               </TableRow>
             ))}

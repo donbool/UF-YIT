@@ -146,9 +146,15 @@ class Register extends React.Component {
           <Button
             className="button_style"
             variant="contained"
-            style={{ backgroundColor: "#07EBB8", color: "white" }}
+            style={{
+              backgroundColor: "#07EBB8",
+              color: "white",
+              fontSize: "inherit",
+              fontFamily: "inherit",
+              textTransform: "none"
+            }}
             size="small"
-            disabled={this.state.username == "" && this.state.password == ""}
+            disabled={this.state.username === "" && this.state.password === ""}
             onClick={this.register}
           >
             Register
@@ -176,10 +182,10 @@ class Register extends React.Component {
               color: "#07EBB8",
             }}
             onClick={() => {
-              this.props.navigate("/Dashboard");
+              this.props.navigate("/Home");
             }}
           >
-            Dashboard
+            Home
           </Link>
         </div>
       </div>
