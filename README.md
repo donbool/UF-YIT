@@ -30,7 +30,8 @@ Clone or download this repository
 4. `npm install`
 
 5. cd into backend, `npm install mongoose` and `npm install dotenv`
-6. create environment variable (.env file) and we have the link
+6. create environment variable (.env file), a .env file is needed to connect to the database, it should start with: 
+MONGODB_URL=mongodb+srv://
 
 ### To Run
 To run node server
@@ -41,5 +42,4 @@ To run react frontend
 1. `cd frontend`
 2. `npm start`
 
-a .env file is also needed to connect to the database, it should start with: 
-MONGODB_URL=mongodb+srv://
+
