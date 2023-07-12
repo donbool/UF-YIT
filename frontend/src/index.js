@@ -11,6 +11,8 @@ import WelcomePage from "./WelcomePage";
 //import ManageStudent from "./ManageStudents";
 import PayrollDashboard from "./Admin/Payroll/Dashboard.js";
 import "./Login.css";
+import { Announcement } from "@mui/icons-material";
+import WeeklyCalendar from "./Announcements";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -21,6 +23,7 @@ ReactDOM.render(
       <Route path="/profiles" element={<ManageProfiles />} /> 
       <Route path="/WelcomePage" element={<WelcomePage />} /> 
       <Route path="/payroll" element={<PayrollDashboard />} /> 
+      {/* <Route path="/attendance" element={<WeeklyCalendar />} />  */}
                                                           //remove dashboard.js file and use the ones inside the role folder
     </Routes>
   </BrowserRouter>,
