@@ -237,7 +237,7 @@ app.post("/add-product", upload.any(), (req, res) => {
         } else {
           res.status(200).json({
             status: true,
-            title: 'Product Added successfully.'
+            title: 'Session Added successfully.'
           });
         }
       });
@@ -318,7 +318,7 @@ app.post("/delete-product", (req, res) => {
         if (data.is_delete) {
           res.status(200).json({
             status: true,
-            title: 'Product deleted.'
+            title: 'Session deleted.'
           });
         } else {
           res.status(400).json({
@@ -434,7 +434,7 @@ app.get("/get-product", (req, res) => {
             if (data && data.length > 0) {
               res.status(200).json({
                 status: true,
-                title: 'Product retrived.',
+                title: 'Session retrived.',
                 products: data,
                 current_page: page,
                 total: count,
@@ -442,7 +442,7 @@ app.get("/get-product", (req, res) => {
               });
             } else {
               res.status(400).json({
-                errorMessage: 'There is no product!',
+                errorMessage: 'There is no session!',
                 status: false
               });
             }
