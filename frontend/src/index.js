@@ -12,6 +12,8 @@ import WelcomePage from "./WelcomePage";
 import PayrollDashboard from "./Admin/Payroll/Dashboard.js";
 import Surveys from "./SurveyForm.js";
 import "./Login.css";
+import { Announcement } from "@mui/icons-material";
+import WeeklyCalendar from "./Announcements";
 
 ReactDOM.render(
   <BrowserRouter>

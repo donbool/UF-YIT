@@ -27,8 +27,8 @@ Clone or download this repository
 1. `cd backend`
 2. `npm install`, `npm install mongoose`, and `npm install dotenv`
 3. `cd ../frontend`
-4. `npm install`
-6. cd into main directory (`cd ..`), create environment variable (.env file), a .env file is needed to connect to the database, it should start with: 
+4. `npm install`, `npm install date-fns`
+6. cd into backend again (`cd ../backend`), create environment variable (.env file), a .env file is needed to connect to the database, it should start with: 
 MONGODB_URL=mongodb+srv://
 
 ### To Run

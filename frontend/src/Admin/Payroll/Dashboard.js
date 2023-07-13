@@ -16,31 +16,19 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { mainListItems, secondaryListItems } from './listItems';
-import Chart from './Chart';
-import Deposits from './Deposits';
+import Spendings from './Spendings';
+import MonthlySpendings from './MonthlySpendings';
+import YearlySpendings from './YearlySpendings';
 import Orders from './Orders';
 import logo from '../../logo.png';
 import axios from 'axios';
+import TutorsList from './tutors';
+import PayRate from './payRate';
+
+
+
 import {
-  Button,
-  TextField,
-  Dialog,
-  DialogActions,
-  LinearProgress,
-  DialogTitle,
-  DialogContent,
-  TableBody,
-  Table,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableCell,
-  InputLabel,
-  makeStyles,
   createStyles,
-  Select,
-  MenuItem,
-  withStyles,
 } from '@material-ui/core';
 
 function Copyright(props) {
@@ -48,13 +36,14 @@ function Copyright(props) {
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://www.youthintransformation.org">
-        Yout in Transformation
+        Youth in Transformation
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
   );
 }
+
 
 const drawerWidth = 240;
 const styles = createStyles({
@@ -124,11 +113,26 @@ class Dashboard extends Component {
     this.state = {
       token: '',
       page: 1,
+      
       users: [],
       pages: 0,
+      showTutors: false,
+      showPayRate: false,
       loading: false,
     };
   }
+
+  handleTutorsClick = () => {
+    this.setState({ showTutors: true, showPayRate: false, showCharts: false });
+  };
+  
+  handlePayRateClick = () => {
+    this.setState({ showPayRate: true, showTutors: false, showCharts: false });
+  };
+  handleDashboardClick = () => {
+    this.setState({ showTutors: false, showPayRate: false, showCharts: false });
+  };
+  
 
   componentDidMount = () => {
     let token = localStorage.getItem('token');
@@ -137,6 +141,7 @@ class Dashboard extends Component {
     } else {
       this.setState({ token: token }, () => {
         this.getSession();
+
       });
     }
   };
@@ -167,14 +172,18 @@ class Dashboard extends Component {
     });
   };
 
+  handleChartsClick = () => {
+    this.setState({ showTutors: false, showPayRate: false, showCharts: true });
+  };
+
 
   toggleDrawer = () => {
     this.setState((prevState) => ({ open: !prevState.open }));
   };
 
   render() {
-    const { open } = this.state;
-
+    const { open, showTutors, showPayRate, showCharts } = this.state;
+  
     return (
       <ThemeProvider theme={defaultTheme}>
         <Box sx={{ display: 'flex' }}>
@@ -226,9 +235,8 @@ class Dashboard extends Component {
             </Toolbar>
             <Divider />
             <List component="nav">
-              {mainListItems}
+              {mainListItems(this.handleTutorsClick, this.handlePayRateClick, this.handleDashboardClick, this.handleChartsClick)}
               <Divider sx={{ my: 1 }} />
-              {secondaryListItems}
             </List>
           </Drawer>
           <Box
@@ -245,40 +253,71 @@ class Dashboard extends Component {
           >
             <Toolbar />
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-              <Grid container spacing={3}>
-                {/* Chart */}
-                <Grid item xs={12} md={8} lg={9}>
-                  <Paper
-                    sx={{
-                      p: 2,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      height: 240,
-                    }}
-                  >
-                    <Chart />
-                  </Paper>
+              {showTutors ? <TutorsList /> : null}
+              {showPayRate ? <PayRate /> : null}
+              {showCharts ? (
+                <iframe 
+                  style={{
+                    background: '#F1F5F4',
+                    border: 'none',
+                    borderRadius: '2px',
+                    boxShadow: '0 2px 10px 0 rgba(70, 76, 79, .2)',
+                    width: '80vw',
+                    height: '100vh'
+                  }}
+                  src="https://charts.mongodb.com/charts-project-0-oyiwi/embed/dashboards?id=c075600e-06f7-4cd2-b9f3-a0bc9ba537c0&theme=light&autoRefresh=true&maxDataAge=3600&showTitleAndDesc=false&scalingWidth=scale&scalingHeight=scale"
+                />
+              ) : null}
+              {!showTutors && !showPayRate && !showCharts ? (
+                <Grid container spacing={3} justify="center">
+                  {/* Recent Deposits */}
+                  <Grid item xs={12} sm={4} md={4} lg={4}>
+                    <Paper
+                      sx={{
+                        p: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        height: 240,
+                      }}
+                    >
+                      <Spendings />
+                    </Paper>
+                  </Grid>
+                  
+                  {/* Recent Deposits */}
+                  <Grid item xs={12} sm={4} md={4} lg={4}>
+                    <Paper
+                      sx={{
+                        p: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        height: 240,
+                      }}
+                    >
+                      <MonthlySpendings />
+                    </Paper>
+                  </Grid>
+                  {/* Recent Deposits */}
+                  <Grid item xs={12} sm={4} md={4} lg={4}>
+                    <Paper
+                      sx={{
+                        p: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        height: 240,
+                      }}
+                    >
+                      <YearlySpendings />
+                    </Paper>
+                  </Grid>
+                  {/* Recent Sessions */}
+                  <Grid item xs={12}>
+                    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                      <Orders />
+                    </Paper>
+                  </Grid>
                 </Grid>
-                {/* Recent Deposits */}
-                <Grid item xs={12} md={4} lg={3}>
-                  <Paper
-                    sx={{
-                      p: 2,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      height: 240,
-                    }}
-                  >
-                    <Deposits />
-                  </Paper>
-                </Grid>
-                {/* Recent Sessions */}
-                <Grid item xs={12}>
-                  <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                    <Orders />
-                  </Paper>
-                </Grid>
-              </Grid>
+              ) : null}
               <Copyright sx={{ pt: 4 }} />
             </Container>
           </Box>
@@ -286,6 +325,10 @@ class Dashboard extends Component {
       </ThemeProvider>
     );
   }
+  
+
+  
+  
 }
 
 export default Dashboard;
