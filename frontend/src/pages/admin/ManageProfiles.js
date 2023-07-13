@@ -330,7 +330,7 @@ class Dashboard extends Component {
             variant="contained"
             color="primary"
             size="small"
-            onClick={() => this.props.navigate('/WelcomePage')}
+            onClick={() => this.props.navigate('/admin/welcome')}
           >
             HOME
           </Button>

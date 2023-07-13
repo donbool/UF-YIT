@@ -25,11 +25,11 @@ ReactDOM.render(
       <Route path="/student/dashboard" element={<StudentDashboard />} />
       <Route path="/tutor/dashboard" element={<TutorDashboard />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} /> 
-      <Route path="/profiles" element={<ManageProfiles />} /> 
+      <Route path="/admin/profiles" element={<ManageProfiles />} /> 
       <Route path="/admin/welcome" element={<AdminWelcomePage />} /> 
       <Route path="/tutor/welcome" element={<TutorWelcomePage />} /> 
       <Route path="/student/welcome" element={<StudentWelcomePage />} /> 
-      <Route path="/payroll" element={<PayrollDashboard />} /> 
+      <Route path="/admin/payroll" element={<PayrollDashboard />} /> 
       {/* <Route path="/attendance" element={<WeeklyCalendar />} />  */}
                                                           //remove dashboard.js file and use the ones inside the role folder
     </Routes>

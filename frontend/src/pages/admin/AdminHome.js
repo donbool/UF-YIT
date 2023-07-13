@@ -78,11 +78,11 @@ class WelcomePage extends Component {
         </Grid>
         <Grid container justify="center" style={{ marginTop: '30px' }}>
           {this.renderCard('Student Profiles', 'Manage student information', '/student')}
-          {this.renderCard('Account Management', 'Manage User Profiles', '/profiles')}
-          {this.renderCard('Payroll', 'View and manage marks', '/payroll')}
-          {this.renderCard('Surveys', 'Participate in surveys', '/surveys')}
-          {this.renderCard('Sessions Dashboard', 'View and manage sessions', '/dashboard')}
-          {this.renderCard('Announcements', 'Manage attendance records', '/attendance')}
+          {this.renderCard('Account Management', 'Manage User Profiles', '/admin/profiles')}
+          {this.renderCard('Payroll', 'View and manage marks', '/admin/payroll')}
+          {this.renderCard('Surveys', 'Participate in surveys', '/admin/surveys')}
+          {this.renderCard('Sessions Dashboard', 'View and manage sessions', '/admin/dashboard')}
+          {this.renderCard('Announcements', 'Manage attendance records', '/admin/attendance')}
         </Grid>
       </div>
     );
