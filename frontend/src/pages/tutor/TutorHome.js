@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Grid, Typography, IconButton, Card, CardHeader, CardContent, CardActions, Button } from '@material-ui/core';
 import { ExitToApp as LogoutIcon } from '@material-ui/icons';
-import { withRouter } from './utils';
-import logo from './logo.png';
+import { withRouter } from './../../utils';
+import logo from './../../images/logo.png';
 
 class WelcomePage extends Component {
   logOut = () => {
@@ -79,8 +79,6 @@ class WelcomePage extends Component {
         <Grid container justify="center" style={{ marginTop: '30px' }}>
           {this.renderCard('Student Profiles', 'Manage student information', '/student')}
           {this.renderCard('Account Management', 'Manage User Profiles', '/profiles')}
-          {this.renderCard('Payroll', 'View and manage marks', '/payroll')}
-          {this.renderCard('Surveys', 'Participate in surveys', '/surveys')}
           {this.renderCard('Sessions Dashboard', 'View and manage sessions', '/dashboard')}
           {this.renderCard('Announcements', 'Manage attendance records', '/attendance')}
         </Grid>

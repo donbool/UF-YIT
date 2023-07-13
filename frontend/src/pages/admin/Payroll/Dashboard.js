@@ -20,7 +20,7 @@ import Spendings from './Spendings';
 import MonthlySpendings from './MonthlySpendings';
 import YearlySpendings from './YearlySpendings';
 import Orders from './Orders';
-import logo from '../../logo.png';
+import logo from '../../../images/logo.png';
 import axios from 'axios';
 import TutorsList from './tutors';
 import PayRate from './payRate';
