@@ -406,6 +406,8 @@ app.get("/get-tutors", (req, res) => {
   }
 });
 
+/*Api to search by tutor*/ 
+
 
 
 /*Api to get and search session with pagination and search by name*/
@@ -420,6 +422,11 @@ app.get("/get-product", (req, res) => {
     if (req.query && req.query.search) {
       query["$and"].push({
         name: { $regex: req.query.search }
+      });
+    }
+    else if (req.query && req.query.searchByTutor) {
+      query["$and"].push({
+        tutor: { $regex: req.query.searchByTutor}
       });
     }
     var perPage = 8;

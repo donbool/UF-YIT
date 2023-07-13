@@ -46,6 +46,7 @@ class Dashboard extends Component {
       fileName: '',
       page: 1,
       search: '',
+      searchByTutor: '',
       products: [],
       selectedDate: new Date(),  // initialize selectedDate to current date
       tutor : '',
@@ -93,6 +94,9 @@ class Dashboard extends Component {
     data = `${data}page=${this.state.page}`;
     if (this.state.search) {
       data = `${data}&search=${this.state.search}`;
+    }
+    else if (this.state.searchByTutor){
+      data = `${data}&searchByTutor=${this.state.searchByTutor}`;
     }
     axios.get(`http://localhost:2000/get-product${data}`, {
       headers: {
@@ -168,6 +172,11 @@ class Dashboard extends Component {
       this.setState({ [e.target.name]: e.target.value });
       if (e.target.name === 'search') {
         this.setState({ page: 1 }, () => {
+          this.getSession();
+        });
+      }
+      else if (e.target.name === 'searchByTutor') {
+        this.setState({ page: 1}, () => {
           this.getSession();
         });
       }
@@ -583,6 +592,16 @@ class Dashboard extends Component {
             value={this.state.search}
             onChange={this.onChange}
             placeholder="Search by student name"
+            required
+          />
+          <TextField
+            id="standard-basic"
+            type="searchByTutor"
+            autoComplete="off"
+            name="searchByTutor"
+            value={this.state.searchByTutor}
+            onChange={this.onChange}
+            placeholder="Search by tutor name"
             required
           />
           <Table aria-label="simple table">
