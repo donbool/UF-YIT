@@ -10,6 +10,7 @@ import { styled } from '@mui/material/styles';
 import { EventNote, School, Group, AccessTime, Comment, Assignment } from '@mui/icons-material';
 import swal from 'sweetalert';
 import { withRouter } from './utils';
+import Header from './components/Header';
 const axios = require('axios');
 const storedName = localStorage.getItem('fullName'); //Keeps Track of current logged user name
 
@@ -303,6 +304,7 @@ class Dashboard extends Component {
     const years = Array.from({ length: 5 }, (_, i) => i + 2023);
     return (
       <div>
+        <Header />
         {this.state.loading && <LinearProgress size={40} />}
         <div>
           <h1 style={{ color: '#07EBB8' }}>Sessions Dashboard</h1>

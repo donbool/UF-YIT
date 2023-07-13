@@ -4,6 +4,7 @@ import { ExitToApp as LogoutIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useNavigate } from 'react-router-dom';  // import useNavigate
 import logo from './logo.png';
+import Header from './components/Header';
 
 const useStyles = makeStyles((theme) => ({
   
@@ -56,12 +57,13 @@ function SurveyForm() {
 
   return (
     <Grid className={classes.root}>
-      <Grid container className={classes.header}>
+      <Header/>
+      {/* <Grid container className={classes.header}>
         <img onClick={navigateHomePage} className={classes.logo} src={logo} alt="Logo" />
         <IconButton onClick={handleLogout}>
           <LogoutIcon style={{ color: '#000000' }}/>
         </IconButton>
-      </Grid>
+      </Grid> */}
       <Card style={{
           backgroundColor: '#FFFFFF',
           borderRadius: '15px',
