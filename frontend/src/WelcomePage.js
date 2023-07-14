@@ -77,7 +77,7 @@ class WelcomePage extends Component {
           </IconButton>
         </Grid>
         <Grid container justify="center" style={{ marginTop: '30px' }}>
-          {this.renderCard('Student Profiles', 'Manage student information', '/student')}
+          {this.renderCard('Student Profiles', 'Manage student information', '/StudentProfiles')}
           {this.renderCard('Account Management', 'Manage User Profiles', '/profiles')}
           {this.renderCard('Payroll', 'View and manage marks', '/payroll')}
           {this.renderCard('Surveys', 'Participate in surveys', '/surveys')}
