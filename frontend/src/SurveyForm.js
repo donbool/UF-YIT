@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography, Card, Grid, IconButton } from '@material-ui/core';
 import { ExitToApp as LogoutIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { useNavigate } from 'react-router-dom';  // import useNavigate
+import { useNavigate } from 'react-router-dom';
 import logo from './logo.png';
 import Header from './components/Header';
 
