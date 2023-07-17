@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import {
     Button,
     TextField,
+    Card, CardHeader, CardContent, CardActions,
     Dialog,
     DialogActions,
+    Grid,
     LinearProgress,
     DialogTitle,
     DialogContent,
@@ -26,7 +28,7 @@ import { Pagination } from '@material-ui/lab';
 import swal from 'sweetalert';
 import { withRouter } from './utils';
 import axios from 'axios';
-import logo from './logo2.png';
+
 
 
 const styles = createStyles({
@@ -300,6 +302,8 @@ class StudentProfiles extends Component {
     handleSessionEditClose = () => {
         this.setState({ openSessionEditModal: false });
     };
+
+
     render() {
         const { classes } = this.props;
 
@@ -445,7 +449,7 @@ class StudentProfiles extends Component {
                         name="search"
                         value={this.state.search}
                         onChange={this.onChange}
-                        placeholder="Search by Name"
+                        placeholder="Search by Student Name"
                         required
                         className={classes.searchField}
                     />
@@ -469,7 +473,7 @@ class StudentProfiles extends Component {
                                             color="primary"
                                             size="small"
                                             style={{ marginRight: '10px' }}
-                                            onClick={(e) => this.handleSessionEditOpen(row)}
+                                            onClick={() => this.props.navigate('/StudentProfiles/' + row.fullName)}
                                         >
                                             View
                                         </Button>
