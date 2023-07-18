@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import swal from "sweetalert";
 import { Button, TextField, Link } from "@material-ui/core";
-import { withRouter } from "./utils";
+import { withRouter } from "./../../utils";
 import axios from "axios";
 import bcrypt from "bcryptjs";
-import logo from './logo.png';  // Importing the logo
+import logo from '../../images/logo.png';  // Importing the logo
 
 var salt = bcrypt.genSaltSync(10);
 
@@ -32,7 +32,25 @@ class Login extends React.Component {
       localStorage.setItem('user_id', res.data.id);
       localStorage.setItem('role', res.data.role);
       localStorage.setItem('fullName', res.data.fullName);
-      this.props.navigate("/WelcomePage");
+      
+      switch (res.data.role) {
+        case 'Admin':
+          this.props.navigate("/WelcomePage");
+          break;
+        case 'Tutor':
+          this.props.navigate("/tutor/dashboard");
+          break;
+        case 'Student':
+          this.props.navigate("/student/welcome");
+          break;
+        default:
+          swal({
+            text: 'Invalid role: ' + res.data.role,
+            icon: "error",
+            type: "error"
+          });
+          break;
+      }
     }).catch((err) => {
       if (err.response && err.response.data && err.response.data.errorMessage) {
         swal({
