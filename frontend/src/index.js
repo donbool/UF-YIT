@@ -14,7 +14,7 @@ import "./pages/login/Login.css";
 import { Announcement } from "@mui/icons-material";
 import WeeklyCalendar from "./pages/admin/Announcements";
 import Surveys from "./pages/admin/Surveys/SurveyForm.js";
-import StudentProfiles from "./pages/tutor/ManageStudents/StudentProfileDashboard";
+import StudentProfiles from "./pages/admin/ManageStudents/StudentProfileDashboardTest";
 
 ReactDOM.render(
   <BrowserRouter>

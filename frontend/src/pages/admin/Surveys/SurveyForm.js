@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../../images/logo.png';
 import Header from '../../../components/shared/Header';
-import PayrollNavbar from '../../../components/admin/payroll/payrollNavbar_noDropdown'; // Import the new component
+import Navbar from '../../../components/shared/nodropdownNavbar'; // Import the new component
 
 // ... (previous code)
 const useStyles = makeStyles((theme) => ({
@@ -61,7 +61,7 @@ function SurveyForm() {
 
   return (
     <Grid className={classes.root}>
-      <PayrollNavbar /> {/* Use the new component here */}
+      <Navbar /> {/* Use the new component here */}
       <Card style={{
           backgroundColor: '#FFFFFF',
           borderRadius: '15px',
