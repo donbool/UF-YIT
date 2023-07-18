@@ -29,8 +29,6 @@ import swal from 'sweetalert';
 import { withRouter } from './utils';
 import axios from 'axios';
 
-
-
 const styles = createStyles({
     container: {
         padding: '20px',
@@ -77,49 +75,6 @@ const styles = createStyles({
     },
 });
 
-
-// Header component
-/*const Header = ({ logo, title, navigate, classes, logOut }) => {
-  return (
-    <div className={classes.header}>
-      <Typography variant="h4" align="center" className={classes.title}>
-        {title}
-      </Typography>
-      <div className={classes.buttonContainer}>
-        <Button
-          className={classes.button}
-          variant="contained"
-          color="primary"
-          size="small"
-          onClick={() => navigate('/register')}
-        >
-          Register
-        </Button>
-
-        <Button
-          className={classes.button}
-          variant="contained"
-          color="primary"
-          size="small"
-          onClick={() => navigate('/payroll')}
-        >
-          Dashboard
-        </Button>
-
-        <Button
-          className={classes.button}
-          variant="contained"
-          color="secondary"
-          size="small"
-          onClick={logOut}
-        >
-          Log Out
-        </Button>
-      </div>
-    </div>
-  );
-};*/
-
 class StudentProfiles extends Component {
     constructor() {
         super();
@@ -159,13 +114,13 @@ class StudentProfiles extends Component {
             data = `${data}&search=${this.state.search}`;
         }
         axios
-            .get(`http://localhost:2000/get-users${data}`, {
+            .get(`http://localhost:2000/get-students${data}`, {
                 headers: {
                     token: this.state.token,
                 },
             })
             .then((res) => {
-                this.setState({ loading: false, users: res.data.users, pages: res.data.pages });
+                this.setState({ loading: false, students: res.data.students, pages: res.data.pages });
             })
             .catch((err) => {
                 swal({
@@ -173,46 +128,10 @@ class StudentProfiles extends Component {
                     icon: 'error',
                     type: 'error',
                 });
-                this.setState({ loading: false, users: [], pages: 0 });
+                this.setState({ loading: false, students: [], pages: 0 });
             });
     };
 
-    deleteSession = (id) => {
-        swal({
-            title: "Are you sure?",
-            text: "Once deleted, you will not be able to recover this session!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        }).then((confirmDelete) => {
-            if (confirmDelete) {
-                axios.post('http://localhost:2000/delete-product', {
-                    id: id
-                }, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'token': this.state.token
-                    }
-                }).then((res) => {
-                    swal({
-                        text: res.data.title,
-                        icon: "success",
-                        type: "success"
-                    });
-
-                    this.setState({ page: 1 }, () => {
-                        this.pageChange(null, 1);
-                    });
-                }).catch((err) => {
-                    swal({
-                        text: err.response.data.errorMessage,
-                        icon: "error",
-                        type: "error"
-                    });
-                });
-            }
-        });
-    }
 
     pageChange = (e, page) => {
         this.setState({ page: page }, () => {
@@ -236,71 +155,6 @@ class StudentProfiles extends Component {
             });
 
         }
-    };
-
-    updateSession = () => {
-        const userData = {
-            id: this.state.id,
-            username: this.state.username,
-            project: this.state.project,
-            password: this.state.password,
-            fullName: this.state.fullName,
-            role: this.state.role,
-        };
-
-        axios
-            .post('http://localhost:2000/update-users', userData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    token: this.state.token,
-                },
-            })
-            .then((res) => {
-                swal({
-                    text: res.data.title,
-                    icon: 'success',
-                    type: 'success',
-                });
-
-                this.handleSessionEditClose();
-                this.setState(
-                    {
-                        username: '',
-                        project: '',
-                        password: '',
-                        role: '',
-                        fullName: '',
-                        file: null,
-                    },
-                    () => {
-                        this.getSession();
-                    }
-                );
-            })
-            .catch((err) => {
-                swal({
-                    text: err.response.data.errorMessage,
-                    icon: 'error',
-                    type: 'error',
-                });
-                this.handleSessionEditClose();
-            });
-    };
-
-    handleSessionEditOpen = (data) => {
-        this.setState({
-            openSessionEditModal: true,
-            id: data._id,
-            username: data.username,
-            project: data.project,
-            fullName: data.fullName,
-            password: data.password,
-            role: data.role,
-        });
-    };
-
-    handleSessionEditClose = () => {
-        this.setState({ openSessionEditModal: false });
     };
 
 
@@ -348,97 +202,6 @@ class StudentProfiles extends Component {
                     </Button></div>
 
 
-                {/* Edit Session */}
-                <Dialog
-                    open={this.state.openSessionEditModal}
-                    onClose={this.handleSessionClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <DialogTitle className={classes.dialogTitle} id="alert-dialog-title">
-                        Edit Session
-                    </DialogTitle>
-                    <DialogContent className={classes.dialogContent}>
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="username"
-                            value={this.state.username}
-                            onChange={this.onChange}
-                            placeholder="Username"
-                            required
-                        />
-
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="fullName"
-                            value={this.state.fullName}
-                            onChange={this.onChange}
-                            placeholder="Full Name"
-                            required
-                        />
-
-                        <Select
-                            id="standard-basic"
-                            name="role"
-                            value={this.state.role}
-                            onChange={this.onChange}
-                            required
-                            placeholder="Role"
-                        >
-                            <MenuItem value="Student">Student</MenuItem>
-                            <MenuItem value="Admin">Admin</MenuItem>
-                            <MenuItem value="Tutor">Tutor</MenuItem>
-                        </Select>
-
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="password"
-                            value={this.state.password}
-                            onChange={this.onChange}
-                            placeholder="Password"
-                            required
-                        />
-
-                        <Select
-                            id="standard-basic"
-                            name="project"
-                            value={this.state.project}
-                            onChange={this.onChange}
-                            required
-                            placeholder="Project"
-                        >
-                            <MenuItem value="Steam+">Steam+</MenuItem>
-                            <MenuItem value="Butterfly">Butterfly</MenuItem>
-                            <MenuItem value="Total_Acess">Total Access</MenuItem>
-                        </Select>
-                    </DialogContent>
-
-                    <DialogActions>
-                        <Button onClick={this.handleSessionEditClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button
-                            disabled={
-                                this.state.username === '' ||
-                                this.state.project === '' ||
-                                this.state.password === '' ||
-                                this.state.fullName === ''
-                            }
-                            onClick={(e) => this.updateSession()}
-                            color="primary"
-                            autoFocus
-                        >
-                            Edit Session
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-
                 <br />
 
                 <Paper className={classes.tableContainer}>
@@ -457,15 +220,15 @@ class StudentProfiles extends Component {
                         <TableHead>
                             <TableRow>
                                 <TableCell align="center">Full Name</TableCell>
-                                <TableCell align="center">Project</TableCell>
+                                <TableCell align="center">Grade</TableCell>
                                 <TableCell align="center">Action</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.state.users.map((row) => (
+                            {this.state.students.map((row) => (
                                 <TableRow key={row.username}>
-                                    <TableCell align="center">{row.fullName}</TableCell>
-                                    <TableCell align="center">{row.project}</TableCell>
+                                    <TableCell align="center">{row.name}</TableCell>
+                                    <TableCell align="center">{row.grade}</TableCell>
                                     <TableCell align="center">
                                         <Button
                                             className={classes.button}
