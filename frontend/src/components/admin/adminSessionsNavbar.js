@@ -19,7 +19,7 @@ import axios from 'axios';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 import Sessions from '../../pages/admin/AdminSessionsDashboard/sessions';
-import AddSession from '../../pages/admin/AdminSessionsDashboard/addSession';
+import AddSession from '../../components/admin/adminSessionsNavbar';
 
 // Component to display copyright information
 function Copyright(props) {
