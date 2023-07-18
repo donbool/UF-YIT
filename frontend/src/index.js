@@ -4,13 +4,12 @@ import ReactDOM from "react-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/login/Login";
 import Register from "./pages/login/Register";
-import StudentDashboard from "./pages/student/StudentSessionsDashboard/sessionsDashboard";
-import TutorDashboard from "./pages/tutor/TutorSessionsDashboard/sessionsDashboard";
-import AdminDashboard from "./pages/admin/AdminSessionsDashboard/sessionsDashboard";
+import StudentDashboard from "./components/student/studentSessionsNavbar";
+import TutorDashboard from "./components/admin/adminSessionsNavbar";
+import AdminDashboard from "./components/admin/adminSessionsNavbar";
 import ManageProfiles from "./pages/admin//AccountManagement/accoutManagement";
-import AdminWelcomePage from "./pages/admin/AdminWelcomePage"; // Import AdminWelcomePage
-//import ManageStudent from "./ManageStudents";
-import PayrollDashboard from "./pages/admin/Payroll/payroll.js";
+import AdminWelcomePage from "./pages/admin/AdminWelcomePage";
+import PayrollDashboard from "./components/admin/payrollNavbar.js";
 import "./pages/login/Login.css";
 import { Announcement } from "@mui/icons-material";
 import WeeklyCalendar from "./pages/admin/Announcements";

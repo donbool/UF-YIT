@@ -4,7 +4,7 @@ import { ExitToApp as LogoutIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../images/logo.png';
-import Header from '../../components/Header';
+import Header from '../../components/shared/Header';
 
 const useStyles = makeStyles((theme) => ({
   
