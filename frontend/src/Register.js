@@ -66,7 +66,7 @@ class Register extends React.Component {
             name="username"
             value={this.state.username}
             onChange={this.onChange}
-            placeholder="User Name"
+            placeholder="Username"
             required
           />
           <br />
@@ -195,20 +195,7 @@ class Register extends React.Component {
           >
             Register
           </Button>{" "}
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <Link
-            component="button"
-            style={{
-              fontFamily: "inherit",
-              fontSize: "inherit",
-              color: "#07EBB8",
-            }}
-            onClick={() => {
-              this.props.navigate("/");
-            }}
-          >
-            Login
-          </Link>{" "}
+         
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {/* This will add some space between Login and Dashboard */}
           <Link
             component="button"

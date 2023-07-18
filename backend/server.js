@@ -10,7 +10,7 @@ var multer = require('multer'),
 var mongoose = require("mongoose");
 mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 var fs = require('fs');
-var product = require("./model/product.js");
+var session = require("./model/session.js");
 var user = require("./model/user.js");
 var student = require("./model/student.js");
 var tutor = require("./model/tutor.js");
@@ -229,22 +229,21 @@ function checkUserAndGenerateToken(data, req, res) {
 
 
 /* Api to add Session */
-app.post("/add-product", upload.any(), (req, res) => {
+app.post("/add-session", upload.any(), (req, res) => {
   
   try {
-    if (req.files && req.body && req.body.name && req.body.comments && req.body.taskAssignment && req.body.date && req.body.subject &&
+    if (req.files && req.body && req.body.name && req.body.comments && req.body.taskAssignment && req.body.date  &&
       req.body.hours && req.body.tutor) {
-      let new_product = new product();
-      new_product.name = req.body.name;
-      new_product.comments = req.body.comments;
-      new_product.taskAssignment = req.body.taskAssignment;
-      new_product.date = req.body.date;
-      new_product.subject = req.body.subject;
-      new_product.attendance = req.body.attendance;
-      new_product.tutor = req.body.tutor;
-      new_product.hours = req.body.hours;
-      new_product.user_id = req.user.id;
-      new_product.save((err, data) => {
+      let new_session = new session();
+      new_session.name = req.body.name;
+      new_session.comments = req.body.comments;
+      new_session.taskAssignment = req.body.taskAssignment;
+      new_session.date = req.body.date;
+      new_session.attendance = req.body.attendance;
+      new_session.tutor = req.body.tutor;
+      new_session.hours = req.body.hours;
+      new_session.user_id = req.user.id;
+      new_session.save((err, data) => {
         if (err) {
           res.status(400).json({
             errorMessage: err,
@@ -273,30 +272,33 @@ app.post("/add-product", upload.any(), (req, res) => {
 });
 
 /* Api to update Session */
-app.post("/update-product", upload.any(), (req, res) => {
+app.post("/update-session", upload.any(), (req, res) => {
   try {
     if (req.files && req.body && req.body.comments && req.body.taskAssignment && req.body.date  &&
       req.body.id && req.body.hours) {
 
-      product.findById(req.body.id, (err, new_product) => {
+      session.findById(req.body.id, (err, new_session) => {
 
         if (req.files && req.files[0] && req.files[0].filename) {
-          new_product.image = req.files[0].filename;
+          new_session.image = req.files[0].filename;
         }
         if (req.body.comments) {
-          new_product.comments = req.body.comments;
+          new_session.comments = req.body.comments;
         }
         if (req.body.taskAssignment) {
-          new_product.taskAssignment = req.body.taskAssignment;
+          new_session.taskAssignment = req.body.taskAssignment;
         }
         if (req.body.date) {
-          new_product.date = req.body.date;
+          new_session.date = req.body.date;
         }
         if (req.body.hours) {
-          new_product.hours = req.body.hours;
+          new_session.hours = req.body.hours;
+        }
+        if (req.body.tutor) {
+          new_session.tutor = req.body.tutor;
         }
 
-        new_product.save((err, data) => {
+        new_session.save((err, data) => {
           if (err) {
             res.status(400).json({
               errorMessage: err,
@@ -327,10 +329,10 @@ app.post("/update-product", upload.any(), (req, res) => {
 });
 
 /* Api to delete Session */
-app.post("/delete-product", (req, res) => {
+app.post("/delete-session", (req, res) => {
   try {
     if (req.body && req.body.id) {
-      product.findByIdAndUpdate(req.body.id, { is_delete: true }, { new: true }, (err, data) => {
+      session.findByIdAndUpdate(req.body.id, { is_delete: true }, { new: true }, (err, data) => {
         if (data.is_delete) {
           res.status(200).json({
             status: true,
@@ -422,12 +424,10 @@ app.get("/get-tutors", (req, res) => {
   }
 });
 
-/*Api to search by tutor*/ 
-
 
 
 /*Api to get and search session with pagination and search by name*/
-app.get("/get-product", (req, res) => {
+app.get("/get-session", (req, res) => {
   try {
     var query = {};
     query["$and"] = [];
@@ -437,27 +437,40 @@ app.get("/get-product", (req, res) => {
     });
     if (req.query && req.query.search) {
       query["$and"].push({
-        name: { $regex: req.query.search }
+        name: { $regex: new RegExp(req.query.search, "i") }
       });
-    }
-    else if (req.query && req.query.searchByTutor) {
+    } else if (req.query && req.query.searchByTutor) {
       query["$and"].push({
-        tutor: { $regex: req.query.searchByTutor}
+        tutor: { $regex: new RegExp(req.query.searchByTutor, "i") }
       });
     }
     var perPage = 8;
     var page = req.query.page || 1;
-    product.find(query, { date: 1, name: 1, id: 1, comments: 1, taskAssignment: 1,date: 1, subject: 1, attendance: 1, hours: 1, tutor: 1 })
-      .sort({date: -1})  // Sorting in descending order
-      .skip((perPage * page) - perPage).limit(perPage)
+    session
+      .find(query, {
+        date: 1,
+        name: 1,
+        id: 1,
+        comments: 1,
+        taskAssignment: 1,
+        date: 1,
+        subject: 1,
+        attendance: 1,
+        hours: 1,
+        tutor: 1
+      })
+      .sort({ date: -1 }) // Sorting in descending order
+      .skip((perPage * page) - perPage)
+      .limit(perPage)
       .then((data) => {
-        product.find(query).count()
+        session
+          .find(query)
+          .count()
           .then((count) => {
-
             if (data && data.length > 0) {
               res.status(200).json({
                 status: true,
-                title: 'Session retrived.',
+                title: 'Product retrived.',
                 products: data,
                 current_page: page,
                 total: count,
@@ -465,14 +478,13 @@ app.get("/get-product", (req, res) => {
               });
             } else {
               res.status(400).json({
-                errorMessage: 'There is no session!',
+                errorMessage: 'There is no product!',
                 status: false
               });
             }
-
           });
-
-      }).catch(err => {
+      })
+      .catch((err) => {
         res.status(400).json({
           errorMessage: err.message || err,
           status: false
@@ -480,14 +492,11 @@ app.get("/get-product", (req, res) => {
       });
   } catch (e) {
     res.status(400).json({
-      errorMessage: 'Something went wrong!',
+      errorMessage: "Something went wrong!",
       status: false
     });
   }
 });
-
-
-
 
 /*Api to get and search users with pagination and search by username*/
 app.get("/get-users", (req, res) => {
@@ -496,7 +505,7 @@ app.get("/get-users", (req, res) => {
     if (req.query && req.query.search) {
       query["fullName"] = { $regex: req.query.search };
     }
-    var perPage = 8;
+    var perPage = 7;
     var page = req.query.page || 1;
     user.find(query, { username: 1, fullName: 1, role: 1,password: 1, project: 1 })
       .skip((perPage * page) - perPage).limit(perPage)
@@ -590,6 +599,7 @@ app.post("/update-users", (req, res) => {
       if(req.body.project) {
         update.project = req.body.project;
       }
+      
 
       user.findByIdAndUpdate(req.body.id, update, { new: true }, (err, data) => {
         
@@ -670,7 +680,6 @@ app.get("/get-students", (req, res) => {
 
 
 app.get('/weekly-hours/:tutor', function(req, res) {
-  console.log("KKKKKKKK");
   var tutorName = req.params.tutor;
 
   var today = new Date();
@@ -681,7 +690,7 @@ app.get('/weekly-hours/:tutor', function(req, res) {
   lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 6);
   lastDayOfWeek.setHours(23, 59, 59, 999); // end of the day
 
-  product.aggregate([
+  session.aggregate([
       {
           $match: {
               tutor: tutorName,
@@ -748,10 +757,9 @@ app.post("/update-payRate", (req, res) => {
 //Api to get Tutor Scheme
 app.get("/get-tutorsInfo", (req, res) => {
   try {
-    tutor.find({}, { name: 1, payRate: 1 })
+    tutor.find({}, { name: 1, payRate: 1, weeklyHours: 1, monthlyHours: 1, yearlyHours: 1, weeklyEarnings: 1, monthlyEarnings: 1,yearlyEarnings: 1})
       .then((data) => {
         
-
         if (data && data.length > 0) {
           res.status(200).json({
             status: true,
@@ -790,7 +798,7 @@ app.get('/monthly-hours/:tutor', function(req, res) {
   var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
   lastDayOfMonth.setHours(23, 59, 59, 999); // end of the day
 
-  product.aggregate([
+  session.aggregate([
       {
           $match: {
               tutor: tutorName,
@@ -901,7 +909,7 @@ app.get('/yearly-hours/:tutor', function(req, res) {
   var lastDayOfYear = new Date(today.getFullYear(), 11, 31); // December 31st
   lastDayOfYear.setHours(23, 59, 59, 999); // end of the day
 
-  product.aggregate([
+  session.aggregate([
       {
           $match: {
               tutor: tutorName,
@@ -918,7 +926,6 @@ app.get('/yearly-hours/:tutor', function(req, res) {
       }
       
   ]).then(function(result) { 
-    console.log(result)
       res.json(result);
   }).catch(function(err){
       console.error(err);
@@ -963,7 +970,6 @@ app.post("/update-tutor-details", (req, res) => {
             status: false
           });
         } else {
-          console.log("It is working");
           res.status(200).json({
             status: true,
             title: 'Tutor details updated successfully.',

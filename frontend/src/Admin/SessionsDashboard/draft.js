@@ -13,7 +13,6 @@ import { withRouter } from './utils';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import { format } from 'date-fns';
-import Header from './components/Header'
 
 const axios = require('axios');
 const storedName = localStorage.getItem('fullName'); //Keeps Track of current logged user name
@@ -47,7 +46,6 @@ class Dashboard extends Component {
       fileName: '',
       page: 1,
       search: '',
-      searchByTutor: '',
       products: [],
       selectedDate: new Date(),  // initialize selectedDate to current date
       tutor : '',
@@ -96,9 +94,6 @@ class Dashboard extends Component {
     if (this.state.search) {
       data = `${data}&search=${this.state.search}`;
     }
-    else if (this.state.searchByTutor){
-      data = `${data}&searchByTutor=${this.state.searchByTutor}`;
-    }
     axios.get(`http://localhost:2000/get-product${data}`, {
       headers: {
         'token': this.state.token
@@ -116,14 +111,6 @@ class Dashboard extends Component {
   }
 
   deleteSession = (id) => {
-    swal({
-      title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover this session!",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then((confirmDelete) => {
-      if (confirmDelete) {
     axios.post('http://localhost:2000/delete-product', {
       id: id
     }, {
@@ -149,8 +136,6 @@ class Dashboard extends Component {
       });
     });
   }
-});
-  }
 
   pageChange = (e, page) => {
     this.setState({ page: page }, () => {
@@ -173,11 +158,6 @@ class Dashboard extends Component {
       this.setState({ [e.target.name]: e.target.value });
       if (e.target.name === 'search') {
         this.setState({ page: 1 }, () => {
-          this.getSession();
-        });
-      }
-      else if (e.target.name === 'searchByTutor') {
-        this.setState({ page: 1}, () => {
           this.getSession();
         });
       }
@@ -306,7 +286,6 @@ class Dashboard extends Component {
     const years = Array.from({ length: 5 }, (_, i) => i + 2023);
     return (
       <div>
-        <Header />
         {this.state.loading && <LinearProgress size={40} />}
         <div>
           <h1 style={{ color: '#07EBB8' }}>Sessions Dashboard</h1>
@@ -420,7 +399,7 @@ class Dashboard extends Component {
 
             <br />
             <br />
-    <InputLabel>Hours Logged</InputLabel>
+    <InputLabel>Hours Worked</InputLabel>
 
             <TextField
               id="standard-basic"
@@ -531,10 +510,9 @@ class Dashboard extends Component {
             </Select>
             <br />
             <br />
-
             
             
-    <InputLabel>Hours Logged</InputLabel>
+    <InputLabel>Hours Worked</InputLabel>
             <TextField
               id="standard-basic"
               type="number"
@@ -596,25 +574,14 @@ class Dashboard extends Component {
             placeholder="Search by student name"
             required
           />
-          <TextField
-            id="standard-basic"
-            type="searchByTutor"
-            autoComplete="off"
-            name="searchByTutor"
-            value={this.state.searchByTutor}
-            onChange={this.onChange}
-            placeholder="Search by tutor name"
-            required
-          />
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell align="center">Date</TableCell>
                 <TableCell align="center">Tutor</TableCell>
-                <TableCell align="center">Students</TableCell>
-                <TableCell align="center">Hours Logged</TableCell>
+                <TableCell align="center">Hours Worked</TableCell>
                 <TableCell align="center">Subjects</TableCell>
-                <TableCell align="center">Comments</TableCell>
+
                 <TableCell align="center">Action</TableCell>
               </TableRow>
             </TableHead>
@@ -625,7 +592,6 @@ class Dashboard extends Component {
   {format(new Date(row.date), 'dd-MM-yyyy')}
 </TableCell>
                   <TableCell align="center">{row.tutor}</TableCell>
-                  <TableCell align="center">{row.name.replace(/[\[\]"\s]/g, ' ').split(' ').join(' ')}</TableCell>
                   <TableCell align="center">{row.hours}</TableCell>
                   <TableCell align="center">{row.subject.replace(/[\[\]"\s]/g, '').split(',').join(', ')}</TableCell>
 
