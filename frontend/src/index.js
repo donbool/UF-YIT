@@ -13,7 +13,7 @@ import PayrollDashboard from "./components/admin/payroll/payrollNavbar.js";
 import "./pages/login/Login.css";
 import { Announcement } from "@mui/icons-material";
 import WeeklyCalendar from "./pages/admin/Announcements";
-import Surveys from "./pages/admin/SurveyForm.js";
+import Surveys from "./pages/admin/Surveys/SurveyForm.js";
 import StudentProfiles from "./pages/tutor/ManageStudents/StudentProfileDashboard";
 
 ReactDOM.render(

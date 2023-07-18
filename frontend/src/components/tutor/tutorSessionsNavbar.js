@@ -1,3 +1,5 @@
+//we have to link sessions created to each profile a part of the session
+
 import React, { Component } from 'react';
 import MuiAppBar from '@mui/material/AppBar';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
@@ -154,7 +156,7 @@ class SessionDashbaord extends Component {
     const navigate = useNavigate();
   
     const goToWelcomePage = () => {
-      navigate('/WelcomePage');
+      navigate('/tutor/dashboard');
     };
   
     return (
