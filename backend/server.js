@@ -129,6 +129,7 @@ app.post("/register", (req, res) => {
             password: req.body.password,
             role: req.body.role,
 	          fullName: req.body.fullName,
+            grade: req.body.grade,
             project: req.body.project
           });
 
@@ -152,7 +153,7 @@ app.post("/register", (req, res) => {
                   monthlyEarnings: 0,
                   yearlyEarnings: 0,
                 });
-
+                
                 newTutor.save((err, data) => {
                   if (err) {
                     console.log('Error saving tutor:', err);
@@ -161,6 +162,21 @@ app.post("/register", (req, res) => {
                   }
                 });
               }
+              if (req.body.role === 'Student') {
+                let newStudent = new student({
+                  name: req.body.fullName,
+                  grade: req.body.grade,
+                  averageMark: 0,
+                });
+                newStudent.save((err, data) => {
+                  if (err) {
+                    console.log('Error saving student:', err);
+                  } else {
+                    console.log('Student saved successfully');
+                  }
+                });
+              }
+              
 
               res.status(200).json({
                 status: true,
@@ -409,6 +425,7 @@ app.get("/get-tutors", (req, res) => {
 });
 
 
+
 /*Api to get and search session with pagination and search by name*/
 app.get("/get-session", (req, res) => {
   try {
@@ -427,7 +444,7 @@ app.get("/get-session", (req, res) => {
         tutor: { $regex: new RegExp(req.query.searchByTutor, "i") }
       });
     }
-    var perPage = 7;
+    var perPage = 8;
     var page = req.query.page || 1;
     session
       .find(query, {
@@ -453,15 +470,15 @@ app.get("/get-session", (req, res) => {
             if (data && data.length > 0) {
               res.status(200).json({
                 status: true,
-                title: "Session retrieved.",
-                sessions: data,
+                title: 'Product retrived.',
+                products: data,
                 current_page: page,
                 total: count,
                 pages: Math.ceil(count / perPage),
               });
             } else {
               res.status(400).json({
-                errorMessage: "There is no session!",
+                errorMessage: 'There is no product!',
                 status: false
               });
             }

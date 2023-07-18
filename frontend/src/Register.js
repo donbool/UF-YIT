@@ -13,6 +13,7 @@ class Register extends React.Component {
       confirm_password: "",
       role: "",
       fullName: "",
+      grade: "",
       project: "", // added project state, have to add to database
     };
   }
@@ -26,6 +27,7 @@ class Register extends React.Component {
         password: this.state.password,
         role: this.state.role,
         fullName: this.state.fullName,
+        grade: this.state.grade,
         project: this.state.project, // added project
       })
       .then((res) => {
@@ -122,6 +124,40 @@ class Register extends React.Component {
             <MenuItem value="Admin">Admin</MenuItem>
             <MenuItem value="Tutor">Tutor</MenuItem>
           </Select>
+          {this.state.role === "Student" && (
+            <>
+              <br />
+              <br />
+              <Select
+                id="standard-basic"
+                name="grade"
+                value={this.state.grade}
+                onChange={this.onChange}
+                required
+                displayEmpty
+                placeholder="Grade"
+                style={{ minWidth: "200px"}}
+              >
+                <MenuItem value="" disable>
+                  <div style={{ textAlign: "left", ...labelStyles }}>Grade</div>
+                </MenuItem>
+                <MenuItem value="0">Grade R</MenuItem>
+                <MenuItem value="1">Grade 1</MenuItem>
+                <MenuItem value="2">Grade 2</MenuItem>
+                <MenuItem value="3">Grade 3</MenuItem>
+                <MenuItem value="4">Grade 4</MenuItem>
+                <MenuItem value="5">Grade 5</MenuItem>
+                <MenuItem value="6">Grade 6</MenuItem>
+                <MenuItem value="7">Grade 7</MenuItem>
+                <MenuItem value="8">Grade 8</MenuItem>
+                <MenuItem value="9">Grade 9</MenuItem>
+                <MenuItem value="10">Grade 10</MenuItem>
+                <MenuItem value="11">Grade 11</MenuItem>
+                <MenuItem value="12">Grade 12</MenuItem>
+              </Select>
+            </>
+          )}
+
           <br />
           <br />
           <Select
@@ -146,9 +182,15 @@ class Register extends React.Component {
           <Button
             className="button_style"
             variant="contained"
-            style={{ backgroundColor: "#07EBB8", color: "white" }}
+            style={{
+              backgroundColor: "#07EBB8",
+              color: "white",
+              fontSize: "inherit",
+              fontFamily: "inherit",
+              textTransform: "none"
+            }}
             size="small"
-            disabled={this.state.username == "" && this.state.password == ""}
+            disabled={this.state.username === "" && this.state.password === ""}
             onClick={this.register}
           >
             Register

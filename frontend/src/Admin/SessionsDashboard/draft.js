@@ -9,11 +9,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import { styled } from '@mui/material/styles';
 import { EventNote, School, Group, AccessTime, Comment, Assignment } from '@mui/icons-material';
 import swal from 'sweetalert';
-import { withRouter } from '../../utils';
+import { withRouter } from './utils';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import { format } from 'date-fns';
-//Caro and Eddie are the best people in the world
+
 const axios = require('axios');
 const storedName = localStorage.getItem('fullName'); //Keeps Track of current logged user name
 
@@ -28,7 +28,7 @@ const StyledSelect = styled(Select)({
   width: '30%',
   marginRight: '1%',
 });
-class SessionsDashboard extends Component {
+class Dashboard extends Component {
   constructor() {
     super();
     this.state = {
@@ -46,7 +46,7 @@ class SessionsDashboard extends Component {
       fileName: '',
       page: 1,
       search: '',
-
+      products: [],
       selectedDate: new Date(),  // initialize selectedDate to current date
       tutor : '',
       pages: 0,
@@ -581,7 +581,7 @@ class SessionsDashboard extends Component {
                 <TableCell align="center">Tutor</TableCell>
                 <TableCell align="center">Hours Worked</TableCell>
                 <TableCell align="center">Subjects</TableCell>
-                <TableCell align="center">Comments</TableCell>
+
                 <TableCell align="center">Action</TableCell>
               </TableRow>
             </TableHead>
@@ -633,4 +633,4 @@ class SessionsDashboard extends Component {
   }
 }
 
-export default withRouter(SessionsDashboard);
+export default withRouter(Dashboard);
