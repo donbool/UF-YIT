@@ -218,7 +218,7 @@ class Register extends React.Component {
               color: "#07EBB8",
             }}
             onClick={() => {
-              this.props.navigate("/Home");
+              this.props.navigate("/WelcomePage");
             }}
           >
             Home
