@@ -129,6 +129,7 @@ app.post("/register", (req, res) => {
             password: req.body.password,
             role: req.body.role,
 	          fullName: req.body.fullName,
+            grade: req.body.grade,
             project: req.body.project
           });
 
@@ -160,6 +161,20 @@ app.post("/register", (req, res) => {
                     console.log('Tutor saved successfully');
                   }
                 });
+              }
+              if (req.body.role === 'Student'){
+                let newStudent = new student({
+                  name: req.body.fullName,
+                  grade: req.body.grade,
+                  averageMark: 0,
+                });
+                newStudent.save((err, data) => {
+                  if (err) {
+                    console.log('Error saving student', err);
+                  } else{
+                    console.log('Student saved successfully');
+                  }
+                })
               }
 
               res.status(200).json({
