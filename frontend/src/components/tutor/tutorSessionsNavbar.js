@@ -1,3 +1,6 @@
+//TODO:
+//RIGHT NOW THIS COMPONENT CONTAINS FUNCTIONALITY FOR THE PAGES, WE NEED TO SPLIT THIS UP FOR CLEAN CODE
+
 import React, { Component } from 'react';
 import MuiAppBar from '@mui/material/AppBar';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
@@ -13,7 +16,7 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { mainListItems } from '../../pages/admin/AdminSessionsDashboard/listSessionOptions';
+import { mainListItems } from '../../pages/tutor/TutorSessionsDashboard/listSessionOptions';
 import logo from '../../images/logo.png';
 import axios from 'axios';
 import LogoutIcon from '@mui/icons-material/Logout';

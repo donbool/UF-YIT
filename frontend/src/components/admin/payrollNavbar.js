@@ -1,3 +1,6 @@
+//TODO:
+//RIGHT NOW THIS COMPONENT CONTAINS FUNCTIONALITY FOR THE PAGES, WE NEED TO SPLIT THIS UP FOR CLEAN CODE
+
 import React, { Component } from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';

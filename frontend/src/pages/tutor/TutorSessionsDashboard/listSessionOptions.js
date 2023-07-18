@@ -4,9 +4,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import TableChartIcon from '@mui/icons-material/TableChart';
 import AddIcon from '@mui/icons-material/Add';
-import BarChartIcon from '@mui/icons-material/BarChart';
+import StudentIcon from '@mui/icons-material/ChildCare';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import ChatIcon from '@material-ui/icons/Chat';
 
-export const mainListItems = (onClickSessions, onClickAdd, onClickCharts) => (
+export const mainListItems = (onClickSessions, onClickAdd, onClickStudent, onClickPayroll, onClickChat) => (
   <React.Fragment>
     <ListItemButton onClick={onClickSessions}>
       <ListItemIcon>
@@ -22,11 +24,25 @@ export const mainListItems = (onClickSessions, onClickAdd, onClickCharts) => (
       <ListItemText primary="Add Session" />
     </ListItemButton>
     
-    <ListItemButton onClick={onClickCharts}>
+    <ListItemButton onClick={onClickStudent}>
       <ListItemIcon>
-      <BarChartIcon />
+      <StudentIcon />
       </ListItemIcon>
-      <ListItemText primary="Reports" />
+      <ListItemText primary="Student Management" />
+    </ListItemButton>
+
+    <ListItemButton onClick={onClickPayroll}>
+      <ListItemIcon>
+      <AttachMoneyIcon />
+      </ListItemIcon>
+      <ListItemText primary="Payroll" />
+    </ListItemButton>
+
+    <ListItemButton onClick={onClickChat}>
+      <ListItemIcon>
+      <ChatIcon />
+      </ListItemIcon>
+      <ListItemText primary="Chat" />
     </ListItemButton>
 
   </React.Fragment>
