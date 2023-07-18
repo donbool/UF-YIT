@@ -422,8 +422,6 @@ app.get("/get-tutors", (req, res) => {
   }
 });
 
-/*Api to search by tutor*/ 
-
 
 
 /*Api to get and search session with pagination and search by name*/
@@ -667,7 +665,65 @@ app.get("/get-students", (req, res) => {
   }
 
 });
+//Api to update student (hopefully use to implement student profile page)
+app.post("/update-student", upload.any(), (req, res) => {
+  try {
+    if (req.files && req.body && req.body.id && req.body.name && req.body.grade && req.body.gender  &&
+      req.body.dateJoined && req.body.comments && req.body.averageMark) {
 
+      student.findById(req.body.id, (err, new_student) => {
+
+        if (req.files && req.files[0] && req.files[0].filename) {
+          new_student.image = req.files[0].filename;
+        }
+        if (req.body.name) {
+          new_student.name = req.body.name;
+        }
+        if (req.body.grade) {
+          new_student.grade = req.body.grade;
+        }
+        if (req.body.gender) {
+          new_student.gender = req.body.gender;
+        }
+        if (req.body.dateJoined) {
+          new_student.dateJoined = req.body.dateJoined;
+        }
+        if (req.body.comments) {
+          new_student.comments = req.body.comments;
+        }
+        if (req.body.averageMark){
+          new_student.averageMark = req.body.averageMark;
+        }
+
+        new_student.save((err, data) => {
+          if (err) {
+            res.status(400).json({
+              errorMessage: err,
+              status: false
+            });
+          } else {
+            res.status(200).json({
+              status: true,
+              title: 'Student updated.'
+            });
+          }
+        });
+
+      });
+
+    } else {
+      res.status(400).json({
+        errorMessage: 'Add proper parameter first!',
+        status: false
+      });
+    }
+  } catch (e) {
+    res.status(400).json({
+      errorMessage: 'Something went wrong!',
+      status: false
+    });
+  }
+});
 
 app.get('/weekly-hours/:tutor', function(req, res) {
   console.log("KKKKKKKK");
