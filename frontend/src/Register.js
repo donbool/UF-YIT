@@ -175,7 +175,7 @@ class Register extends React.Component {
             </MenuItem>
             <MenuItem value="Steam+">Steam+</MenuItem>
             <MenuItem value="Butterfly">Butterfly</MenuItem>
-            <MenuItem value="Total_Access">Total Access</MenuItem>
+            <MenuItem value="Total Access">Total Access</MenuItem>
           </Select>
           <br />
           <br />

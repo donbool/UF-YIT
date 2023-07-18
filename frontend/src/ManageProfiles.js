@@ -432,7 +432,7 @@ class Dashboard extends Component {
           >
             <MenuItem value="Steam+">Steam+</MenuItem>
             <MenuItem value="Butterfly">Butterfly</MenuItem>
-            <MenuItem value="Total_Acess">Total Access</MenuItem>
+            <MenuItem value="Total Access">Total Access</MenuItem>
           </Select>
         </DialogContent>
 
