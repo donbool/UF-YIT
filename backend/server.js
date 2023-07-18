@@ -357,42 +357,7 @@ app.post("/delete-product", (req, res) => {
   }
 });
 
-/* Api to get a specific student's grade */
-app.get("/get-student-grade-LP/:studentName", (req, res) => {
-  try {
 
-    const name = req.params.studentName;
-
-    student.find(name)
-      .select("grade")
-      .exec((err, Student) => {
-        if (err) {
-          return res.status(400).json({
-            errorMessage: "Something went wrong!",
-            status: false
-          });
-        }
-
-        if (!Student) {
-          return res.status(404).json({
-            errorMessage: "Student not found!",
-            status: false
-          });
-        }
-
-        return res.status(200).json({
-          status: true,
-          Student: Student
-        });
-      });
-  }
-  catch (e) {
-      res.status(400).json({
-        errorMessage: "Something went wrong!",
-        status: false
-      });
-    }
-  });
 
 /* Api to get all tutors sorted by full name */
 app.get("/get-tutors", (req, res) => {
@@ -543,56 +508,6 @@ app.get("/get-users", (req, res) => {
 
 });
 
-//test duplicate
-app.get("/get-users-test", (req, res) => {
-  try {
-    var query = {};
-    if (req.query && req.query.search) {
-      query["fullName"] = { $regex: req.query.search };
-    }
-    var perPage = 8;
-    var page = req.query.page || 1;
-    user.find(query, { username: 1, fullName: 1, role: 1, password: 1, project: 1 })
-      .skip((perPage * page) - perPage).limit(perPage)
-      .then((data) => {
-        user.countDocuments(query)
-          .then((count) => {
-
-            if (data && data.length > 0) {
-              res.status(200).json({
-                status: true,
-                title: 'User retrieved.',
-                users: data,
-                current_page: page,
-                total: count,
-                pages: Math.ceil(count / perPage),
-              });
-            } else {
-              res.status(400).json({
-                errorMessage: 'No users found!',
-                status: false
-              });
-            }
-
-          });
-
-      }).catch(err => {
-        res.status(400).json({
-          errorMessage: err.message || err,
-          status: false
-        });
-      });
-  } catch (e) {
-    res.status(400).json({
-      errorMessage: 'Something went wrong!',
-      status: false
-    });
-  }
-
-});
-
-
-
 /* Api to delete User */
 app.post("/delete-users", (req, res) => {
   try {
@@ -695,7 +610,7 @@ app.get("/get-students", (req, res) => {
               res.status(200).json({
                 status: true,
                 title: 'Student retrieved.',
-                students: data, //LP
+                students: data, 
                 current_page: page,
                 total: count,
                 pages: Math.ceil(count / perPage),
