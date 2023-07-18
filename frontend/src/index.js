@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/login/Login";
 import Register from "./pages/login/Register";
 import StudentDashboard from "./components/student/studentSessionsNavbar";
-import TutorDashboard from "./components/admin/adminSessionsNavbar";
+import TutorDashboard from "./components/tutor/tutorSessionsNavbar";
 import AdminDashboard from "./components/admin/adminSessionsNavbar";
 import ManageProfiles from "./pages/admin//AccountManagement/accoutManagement";
 import AdminWelcomePage from "./pages/admin/AdminWelcomePage";
