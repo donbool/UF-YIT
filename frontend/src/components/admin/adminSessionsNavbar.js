@@ -1,3 +1,5 @@
+//todo: we need to split this comonent up because it has page functionality in it
+
 import React, { Component } from 'react';
 import MuiAppBar from '@mui/material/AppBar';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
