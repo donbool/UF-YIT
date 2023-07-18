@@ -9,7 +9,7 @@ import TutorDashboard from "./components/admin/adminSessionsNavbar";
 import AdminDashboard from "./components/admin/adminSessionsNavbar";
 import ManageProfiles from "./pages/admin//AccountManagement/accoutManagement";
 import AdminWelcomePage from "./pages/admin/AdminWelcomePage";
-import PayrollDashboard from "./components/admin/payrollNavbar.js";
+import PayrollDashboard from "./components/admin/payroll/payrollNavbar.js";
 import "./pages/login/Login.css";
 import { Announcement } from "@mui/icons-material";
 import WeeklyCalendar from "./pages/admin/Announcements";
