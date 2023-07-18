@@ -41,7 +41,7 @@ class Login extends React.Component {
           this.props.navigate("/tutor/dashboard");
           break;
         case 'Student':
-          this.props.navigate("/student/welcome");
+          this.props.navigate("/student/dashboard");
           break;
         default:
           swal({
