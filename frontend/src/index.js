@@ -1,33 +1,36 @@
 import React from "react";
 import ReactDOM from "react-dom";
+//import { Route } from "react-router";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-import Login from "./Login";
-import Register from "./Register";
-import SessionsDashboard from "./Admin/SessionsDashboard/sessionsDashboard";
-import ManageProfiles from "./Admin/AccountManagement/accoutManagement";
-import WelcomePage from "./WelcomePage";
-//import ManageStudent from "./ManageStudents";
-import StudentProfiles from "./StudentProfiles";
-import StudentInfo from "./StudentInfo";
-import PayrollDashboard from "./Admin/Payroll/payroll.js";
-import Surveys from "./SurveyForm.js";
-import "./Login.css";
+import Login from "./pages/login/Login";
+import Register from "./pages/login/Register";
+import StudentDashboard from "./components/student/studentSessionsNavbar";
+import TutorDashboard from "./components/admin/adminSessionsNavbar";
+import AdminDashboard from "./components/admin/adminSessionsNavbar";
+import ManageProfiles from "./pages/admin//AccountManagement/accoutManagement";
+import AdminWelcomePage from "./pages/admin/AdminWelcomePage";
+import PayrollDashboard from "./components/admin/payrollNavbar.js";
+import "./pages/login/Login.css";
 import { Announcement } from "@mui/icons-material";
-import WeeklyCalendar from "./Announcements";
+import WeeklyCalendar from "./pages/admin/Announcements";
+import Surveys from "./pages/admin/SurveyForm.js";
+import StudentProfiles from "./pages/tutor/ManageStudents/StudentProfileDashboard";
 
 ReactDOM.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/sessions" element={<SessionsDashboard />} /> //to be changed to admin dashboard or something, 
-      <Route path="/ManageProfiles" element={<ManageProfiles />} /> 
-      <Route path="/WelcomePage" element={<WelcomePage />} /> 
-      {/* <Route path="/student" element={<ManageStudent />} />  */}
+      <Route path="/student/dashboard" element={<StudentDashboard />} />
+      <Route path="/tutor/dashboard" element={<TutorDashboard />} />
+      <Route path="/dashboard" element={<AdminDashboard />} /> 
+      <Route path="/profiles" element={<ManageProfiles />} /> 
+      <Route path="/students" element={<StudentProfiles />} /> 
+      <Route path="/WelcomePage" element={<AdminWelcomePage />} /> 
       <Route path="/payroll" element={<PayrollDashboard />} /> 
       <Route path="/surveys" element={<Surveys />} /> 
-                                                          //remove dashboard.js file and use the ones inside the role folder
+      {/* <Route path="/attendance" element={<WeeklyCalendar />} />  */}
+                                                         
     </Routes>
   </BrowserRouter>,
   document.getElementById("root")

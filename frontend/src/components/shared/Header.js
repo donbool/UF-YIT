@@ -1,9 +1,11 @@
+//THIS IS NOT USED AND JUST A REACT TEMPLATE YUR, keep tho
+
 import React from 'react';
 import { Grid, IconButton } from '@material-ui/core';
 import { ExitToApp as LogoutIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useNavigate } from 'react-router-dom';
-import logo from './logo.png';
+import logo from './../../images/logo.png';
 
 const useStyles = makeStyles((theme) => ({
   header: {

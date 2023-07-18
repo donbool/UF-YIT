@@ -26,7 +26,7 @@ import {
 } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import swal from 'sweetalert';
-import { withRouter } from './utils';
+import { withRouter } from '../../../utils';
 import axios from 'axios';
 
 

@@ -13,16 +13,13 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { mainListItems } from './listUserOptions';
-import Account from './accounts';
-import logo from '../../logo.png';
+import { mainListItems } from './../../pages/admin/AdminSessionsDashboard/listSessionOptions';
+import logo from '../../images/logo.png';
 import axios from 'axios';
-import GoToRegister from './navigateRegister';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
-
-
-
+import Sessions from './../../pages/admin/AdminSessionsDashboard/sessions';
+import AddSession from './../shared/addSession';
 
 // Component to display copyright information
 function Copyright(props) {
@@ -38,10 +35,8 @@ function Copyright(props) {
   );
 }
 
-
-
 // Width of the drawer
-const drawerWidth = 180;
+const drawerWidth = 200;
 
 // Creating a default theme for the application
 const defaultTheme = createTheme({
@@ -107,95 +102,36 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-
-
-class ManageProfiles extends Component {
+class SessionDashbaord extends Component {
   constructor() {
     super();
     this.state = {
-      token: '',
-      page: 1,
-      users: [],
-      pages: 0,
-      showAccounts: false,
-      showRegister: false,
+      showSessions: true,
+      addSession: false,
+      showReports: false,
       loading: false,
-      
-     
     };
   }
 
-
+    // Toggle the drawer open/close state
+    toggleDrawer = () => {
+      this.setState((prevState) => ({ open: !prevState.open }));
+    };
   
-
-  
-  
-
   // Event handler for the register button click
-  handleRegisterClick = () => {
-    this.setState({ showAccounts: false, showRegister: true, showCharts: false });
+  handleSessionsClick = () => {
+    this.setState({ showSessions: true, addSession: false, showReports: false });
   };
 
   // Event handler for the accounts button click
-  handleAccountsClick = () => {
-    this.setState({ showRegister: false, showAccounts: true, showCharts: false });
+  handleAddSessionClick = () => {
+    this.setState({ showSessions: false, addSession: true, showReports: false });
   };
 
   // Event handler for the charts button click
-  handleChartsClick = () => {
-    this.setState({ showAccounts: false, showRegister: false, showCharts: false });
+  handleReportsClick = () => {
+    this.setState({ showSessions: false, addSession: false, showReports: true });
   };
-
-  // Lifecycle method that is called after the component has been added to the DOM
-  componentDidMount = () => {
-    let token = localStorage.getItem('token');
-    if (!token) {
-      this.props.navigate('/login');
-    } else {
-      this.setState({ token: token }, () => {
-        this.getSession();
-      });
-    }
-  };
-
-  // Method to fetch session data
-  getSession = () => {
-    this.setState({ loading: true });
-
-    let data = '?';
-    data = `${data}page=${this.state.page}`;
-
-    axios
-      .get(`http://localhost:2000/get-users${data}`, {
-        headers: {
-          token: this.state.token,
-        },
-      })
-      .then((res) => {
-        this.setState({ loading: false, users: res.data.users, pages: res.data.pages });
-      })
-      .catch((err) => {
-        this.setState({ loading: false, users: [], pages: 0 });
-      });
-  };
-
-  // Event handler for page change
-  pageChange = (e, page) => {
-    this.setState({ page: page }, () => {
-      this.getSession();
-    });
-  };
-
-  // Event handler for the charts button click
-  handleChartsClick = () => {
-    this.setState({ showAccounts: false, showRegister: false, showCharts: true });
-  };
-
-  // Toggle the drawer open/close state
-  toggleDrawer = () => {
-    this.setState((prevState) => ({ open: !prevState.open }));
-  };
-
 
   LogOutButton = () => {
     const navigate = useNavigate();
@@ -228,12 +164,10 @@ class ManageProfiles extends Component {
     );
   };
   
-
   render() {
- 
-    const { open, showAccounts, showRegister, showCharts } = this.state;
+    const { open, showSessions, addSession, showReports } = this.state;
     const { LogOutButton, LogoButton } = this;
-
+  
     return (
       <ThemeProvider theme={defaultTheme}>
         <Box sx={{ display: 'flex' }}>
@@ -263,14 +197,11 @@ class ManageProfiles extends Component {
                 noWrap
                 sx={{ flexGrow: 1, fontWeight: 'bold', marginLeft: '150px' }} // Adjust this value to your needs
               >
-                Account Management
+                Sessions Dashboard
               </Typography>
-
               <div>
-              <LogoButton />
-
+                <LogoButton />
                 <span style={{ marginRight: '10px' }}></span> {/* Add space between the two icons */}
-
                 <LogOutButton />
               </div>
             </Toolbar>
@@ -288,10 +219,9 @@ class ManageProfiles extends Component {
                 <ChevronLeftIcon />
               </IconButton>
             </Toolbar>
-
             <List component="nav">
-              {/* Render the main list items */}
-              {mainListItems(this.handleRegisterClick, this.handleAccountsClick, this.handleChartsClick)}
+              {/* Render the list Session Options */}
+              {mainListItems(this.handleSessionsClick, this.handleAddSessionClick, this.handleReportsClick)}
             </List>
           </Drawer>
           <Box
@@ -306,33 +236,22 @@ class ManageProfiles extends Component {
           >
             <Toolbar />
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-              {/* Render GoToRegister component if showRegister is true */}
-              {showRegister ? <GoToRegister /> : null}
-
-              {/* Render charts component */}
-              {showCharts ? (
+              {/* Conditionally render the components based on the state */}
+              {showSessions && <Sessions/>}
+              {addSession && <AddSession/>}
+              {showReports && (
                 <iframe
-                  style={{
-                    background: '#F1F5F4',
-                    border: 'none',
-                    borderRadius: '2px',
-                    boxShadow: '0 2px 10px 0 rgba(70, 76, 79, .2)',
-                    width: '80vw',
-                    height: '100vh',
-                  }}
-                  src="https://charts.mongodb.com/charts-project-0-oyiwi/embed/dashboards?id=de991947-2947-4029-a992-1fb0cc6ac1fb&theme=light&autoRefresh=true&maxDataAge=300&showTitleAndDesc=false&scalingWidth=scale&scalingHeight=scale"
-                />
-              ) : null}
-
-              {/* Render Account component or other content */}
-              {showAccounts || (!showRegister && !showCharts) ? (
-                <Grid container spacing={3} justifyContent="center">
-                  <Grid item xs={12}>
-                    <Account />
-                  </Grid>
-                </Grid>
-              ) : null}
-
+                style={{
+                  background: '#F1F5F4',
+                  border: 'none',
+                  borderRadius: '2px',
+                  boxShadow: '0 2px 10px 0 rgba(70, 76, 79, .2)',
+                  width: '80vw',
+                  height: '100vh',
+                }}
+                src="https://charts.mongodb.com/charts-project-0-oyiwi/embed/dashboards?id=a6bc5c09-215f-4d3d-942e-fc32036d064f&theme=light&autoRefresh=true&maxDataAge=300&showTitleAndDesc=false&scalingWidth=scale&scalingHeight=scale"
+              />
+              )}
               {/* Render copyright component */}
               <Copyright sx={{ pt: 4 }} />
             </Container>
@@ -341,6 +260,8 @@ class ManageProfiles extends Component {
       </ThemeProvider>
     );
   }
+  
+  
 }
 
-export default  (ManageProfiles);
+export default  (SessionDashbaord);
