@@ -19,7 +19,9 @@ import axios from 'axios';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 import Sessions from './../../pages/student/StudentSessionsDashboard/sessions';
-import AddSession from './../shared/addSession';
+import Announcements from './../../pages/admin/Announcements';
+import Surveys from './../../pages/admin/Surveys/SurveyForm';
+
 
 // Component to display copyright information
 function Copyright(props) {
@@ -107,9 +109,9 @@ class SessionDashbaord extends Component {
     super();
     this.state = {
       showSessions: true,
-      addSession: false,
-      showReports: false,
-      loading: false,
+      showAnnouncements: false,
+      showSurveys: false,
+      showResources: false,
     };
   }
 
@@ -120,17 +122,22 @@ class SessionDashbaord extends Component {
   
   // Event handler for the register button click
   handleSessionsClick = () => {
-    this.setState({ showSessions: true, addSession: false, showReports: false });
+    this.setState({ showSessions: true, showAnnouncements: false, showSurveys: false, showResources: false});
   };
 
   // Event handler for the accounts button click
-  handleAddSessionClick = () => {
-    this.setState({ showSessions: false, addSession: true, showReports: false });
+  handleAnnouncementClick = () => {
+    this.setState({ showSessions: false, showAnnouncements: true, showSurveys: false, showResources: false});
   };
 
+  // Event handler for the accounts button click
+  handleResourcesClick = () => {
+      this.setState({ showSessions: false, showAnnouncements: false, showSurveys: false, showResources: true});
+    };
+
   // Event handler for the charts button click
-  handleReportsClick = () => {
-    this.setState({ showSessions: false, addSession: false, showReports: true });
+  handleSurveysClick = () => {
+    this.setState({ showSessions: false, showAnnouncements: false, showSurveys: true, showResources: false });
   };
 
   LogOutButton = () => {
@@ -165,7 +172,7 @@ class SessionDashbaord extends Component {
   };
   
   render() {
-    const { open, showSessions, addSession, showReports } = this.state;
+    const { open, showSessions, showAnnouncement, showSurveys, showResources } = this.state;
     const { LogOutButton, LogoButton } = this;
   
     return (
@@ -221,7 +228,7 @@ class SessionDashbaord extends Component {
             </Toolbar>
             <List component="nav">
               {/* Render the list Session Options */}
-              {mainListItems(this.handleSessionsClick, this.handleAddSessionClick, this.handleReportsClick)}
+              {mainListItems(this.handleSessionsClick, this.handleAnnouncementsClick, this.handleResourcesClick, this.handleSurveysClick)}
             </List>
           </Drawer>
           <Box
@@ -238,20 +245,9 @@ class SessionDashbaord extends Component {
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
               {/* Conditionally render the components based on the state */}
               {showSessions && <Sessions/>}
-              {addSession && <AddSession/>}
-              {showReports && (
-                <iframe
-                style={{
-                  background: '#F1F5F4',
-                  border: 'none',
-                  borderRadius: '2px',
-                  boxShadow: '0 2px 10px 0 rgba(70, 76, 79, .2)',
-                  width: '80vw',
-                  height: '100vh',
-                }}
-                src="https://charts.mongodb.com/charts-project-0-oyiwi/embed/dashboards?id=a6bc5c09-215f-4d3d-942e-fc32036d064f&theme=light&autoRefresh=true&maxDataAge=300&showTitleAndDesc=false&scalingWidth=scale&scalingHeight=scale"
-              />
-              )}
+              {showAnnouncement && <Announcements/>}
+              {showSurveys && <Surveys/>}
+              {/* {showResources && <Surveys/>} */}
               {/* Render copyright component */}
               <Copyright sx={{ pt: 4 }} />
             </Container>
