@@ -10,7 +10,7 @@ import WelcomePage from "./WelcomePage";
 //import ManageStudent from "./ManageStudents";
 import StudentProfiles from "./StudentProfiles";
 import StudentInfo from "./StudentInfo";
-import PayrollDashboard from "./Admin/Payroll/Dashboard.js";
+import PayrollDashboard from "./Admin/Payroll/payroll.js";
 import Surveys from "./SurveyForm.js";
 import "./Login.css";
 import { Announcement } from "@mui/icons-material";
@@ -24,7 +24,7 @@ ReactDOM.render(
       <Route path="/sessions" element={<SessionsDashboard />} /> //to be changed to admin dashboard or something, 
       <Route path="/ManageProfiles" element={<ManageProfiles />} /> 
       <Route path="/WelcomePage" element={<WelcomePage />} /> 
-      <Route path="/student" element={<ManageStudent />} /> 
+      {/* <Route path="/student" element={<ManageStudent />} />  */}
       <Route path="/payroll" element={<PayrollDashboard />} /> 
       <Route path="/surveys" element={<Surveys />} /> 
                                                           //remove dashboard.js file and use the ones inside the role folder
