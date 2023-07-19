@@ -5,16 +5,16 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/login/Login";
 import Register from "./pages/login/Register";
 import StudentDashboard from "./components/student/studentSessionsNavbar";
-import TutorDashboard from "./components/admin/adminSessionsNavbar";
+import TutorDashboard from "./components/tutor/tutorSessionsNavbar";
 import AdminDashboard from "./components/admin/adminSessionsNavbar";
 import ManageProfiles from "./pages/admin//AccountManagement/accoutManagement";
 import AdminWelcomePage from "./pages/admin/AdminWelcomePage";
-import PayrollDashboard from "./components/admin/payrollNavbar.js";
+import PayrollDashboard from "./components/admin/payroll/payrollNavbar.js";
 import "./pages/login/Login.css";
 import { Announcement } from "@mui/icons-material";
 import WeeklyCalendar from "./pages/admin/Announcements";
-import Surveys from "./pages/admin/SurveyForm.js";
-import StudentProfiles from "./pages/tutor/ManageStudents/StudentProfileDashboard";
+import Surveys from "./pages/admin/Surveys/SurveyForm.js";
+import StudentProfiles from "./pages/admin/ManageStudents/StudentProfileDashboardTest";
 
 ReactDOM.render(
   <BrowserRouter>

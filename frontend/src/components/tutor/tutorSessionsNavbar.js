@@ -1,5 +1,4 @@
-//TODO:
-//RIGHT NOW THIS COMPONENT CONTAINS FUNCTIONALITY FOR THE PAGES, WE NEED TO SPLIT THIS UP FOR CLEAN CODE
+//we have to link sessions created to each profile a part of the session
 
 import React, { Component } from 'react';
 import MuiAppBar from '@mui/material/AppBar';
@@ -16,13 +15,13 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { mainListItems } from '../../pages/tutor/TutorSessionsDashboard/listSessionOptions';
+import { mainListItems } from './../../pages/tutor/TutorSessionsDashboard/listSessionOptions';
 import logo from '../../images/logo.png';
 import axios from 'axios';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
-import Sessions from '../../pages/tutor/TutorSessionsDashboard/sessions';
-import AddSession from '../shared/addSession';
+import Sessions from './../../pages/tutor/TutorSessionsDashboard/sessions';
+import AddSession from './../shared/addSession';
 
 // Component to display copyright information
 function Copyright(props) {

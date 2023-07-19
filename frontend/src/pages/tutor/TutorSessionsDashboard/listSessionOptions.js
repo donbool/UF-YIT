@@ -28,7 +28,7 @@ export const mainListItems = (onClickSessions, onClickAdd, onClickStudent, onCli
       <ListItemIcon>
       <StudentIcon />
       </ListItemIcon>
-      <ListItemText primary="Student Management" />
+      <ListItemText primary="Students" />
     </ListItemButton>
 
     <ListItemButton onClick={onClickPayroll}>
