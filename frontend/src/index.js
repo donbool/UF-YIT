@@ -15,6 +15,7 @@ import { Announcement } from "@mui/icons-material";
 import WeeklyCalendar from "./pages/admin/Announcements";
 import Surveys from "./pages/admin/Surveys/SurveyForm.js";
 import StudentProfiles from "./pages/admin/ManageStudents/StudentProfileDashboardTest";
+import StudentInfo from "./pages/student/StudentProfiles/StudentInfo"
 
 ReactDOM.render(
   <BrowserRouter>
@@ -26,6 +27,7 @@ ReactDOM.render(
       <Route path="/dashboard" element={<AdminDashboard />} /> 
       <Route path="/profiles" element={<ManageProfiles />} /> 
       <Route path="/students" element={<StudentProfiles />} /> 
+      <Route path="/StudentProfiles/:name" element={<StudentInfo/>} />
       <Route path="/WelcomePage" element={<AdminWelcomePage />} /> 
       <Route path="/payroll" element={<PayrollDashboard />} /> 
       <Route path="/surveys" element={<Surveys />} /> 
