@@ -219,7 +219,7 @@ class StudentProfiles extends Component {
                                                 color="primary"
                                                 size="small"
                                                 style={{ marginRight: '10px' }}
-                                                onClick={() => this.props.navigate('/StudentProfiles/' + row.fullName)}
+                                                onClick={() => this.props.navigate('/StudentProfiles/' + row.name)}
                                             >
                                                 View
                                             </Button>
