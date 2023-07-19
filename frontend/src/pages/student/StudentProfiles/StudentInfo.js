@@ -1,32 +1,14 @@
 import React, { Component } from 'react';
 import {
-    Button,
-    TextField,
-    Dialog,
-    DialogActions,
-    LinearProgress,
-    DialogTitle,
-    DialogContent,
-    TableBody,
-    Table,
-    TableContainer,
-    TableHead,
-    TableRow,
-    TableCell,
-    InputLabel,
-    makeStyles,
     createStyles,
-    Select,
-    MenuItem,
     withStyles,
-    Paper,
-    Typography,
+
 } from '@material-ui/core';
-import { Pagination } from '@material-ui/lab';
+import Navbar from '../../../components/shared/nodropdownNavbar';
 import swal from 'sweetalert';
 import { withRouter } from '../../../utils';
 import axios from 'axios';
-import logo from './logo2.png';
+
 
 
 const styles = createStyles({
@@ -82,7 +64,22 @@ class StudentInfo extends Component {
     
     render() {
         return (
-            <h2>This is a user</h2>
+            <div>
+                
+                <Navbar></Navbar>
+
+                <div>
+                    
+
+                    <div>
+                        <h1 style={{ color: '#07EBB8' }}>This is a Student</h1>
+
+                    </div>
+
+
+                    
+                </div>
+            </div>
         );
     }
 

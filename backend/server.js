@@ -128,7 +128,8 @@ app.post("/register", (req, res) => {
             username: req.body.username,
             password: req.body.password,
             role: req.body.role,
-	          fullName: req.body.fullName,
+            fullName: req.body.fullName,
+            grade: req.body.grade,
             project: req.body.project
           });
 
@@ -145,10 +146,10 @@ app.post("/register", (req, res) => {
                 let newTutor = new tutor({
                   name: req.body.fullName,
                   payRate: 0,
-                  weeklyHours : 0,
+                  weeklyHours: 0,
                   monthlyHours: 0,
                   yearlyHours: 0,
-                  weeklyEarnings : 0,
+                  weeklyEarnings: 0,
                   monthlyEarnings: 0,
                   yearlyEarnings: 0,
                 });
@@ -161,6 +162,21 @@ app.post("/register", (req, res) => {
                   }
                 });
               }
+              if (req.body.role === 'Student') {
+                let newStudent = new student({
+                  name: req.body.fullName,
+                  grade: req.body.grade,
+                  averageMark: 0,
+                });
+                newStudent.save((err, data) => {
+                  if (err) {
+                    console.log('Error saving student:', err);
+                  } else {
+                    console.log('Student saved successfully');
+                  }
+                });
+              }
+
 
               res.status(200).json({
                 status: true,
@@ -193,7 +209,7 @@ app.post("/register", (req, res) => {
 });
 
 function checkUserAndGenerateToken(data, req, res) {
-  jwt.sign({ user: data.username, id: data._id}, 'shhhhh11111', { expiresIn: '1d' }, (err, token) => {
+  jwt.sign({ user: data.username, id: data._id }, 'shhhhh11111', { expiresIn: '1d' }, (err, token) => {
     if (err) {
       res.status(400).json({
         status: false,
@@ -214,15 +230,16 @@ function checkUserAndGenerateToken(data, req, res) {
 
 /* Api to add Session */
 app.post("/add-session", upload.any(), (req, res) => {
-  
+
   try {
-    if (req.files && req.body && req.body.name && req.body.comments && req.body.taskAssignment && req.body.date  &&
+    if (req.files && req.body && req.body.name && req.body.comments && req.body.taskAssignment && req.body.date && req.body.subject &&
       req.body.hours && req.body.tutor) {
       let new_session = new session();
       new_session.name = req.body.name;
       new_session.comments = req.body.comments;
       new_session.taskAssignment = req.body.taskAssignment;
       new_session.date = req.body.date;
+      new_session.subject = req.body.subject;
       new_session.attendance = req.body.attendance;
       new_session.tutor = req.body.tutor;
       new_session.hours = req.body.hours;
@@ -258,7 +275,7 @@ app.post("/add-session", upload.any(), (req, res) => {
 /* Api to update Session */
 app.post("/update-session", upload.any(), (req, res) => {
   try {
-    if (req.files && req.body && req.body.comments && req.body.taskAssignment && req.body.date  &&
+    if (req.files && req.body && req.body.comments && req.body.taskAssignment && req.body.date &&
       req.body.id && req.body.hours) {
 
       session.findById(req.body.id, (err, new_session) => {
@@ -278,8 +295,8 @@ app.post("/update-session", upload.any(), (req, res) => {
         if (req.body.hours) {
           new_session.hours = req.body.hours;
         }
-        if (req.body.tutor) {
-          new_session.tutor = req.body.tutor;
+        if (req.body.tutor) {	
+          new_session.tutor = req.body.tutor;	
         }
 
         new_session.save((err, data) => {
@@ -343,41 +360,12 @@ app.post("/delete-session", (req, res) => {
   }
 });
 
-/* Api to get all students sorted by full name */
-app.get("/get-students", (req, res) => {
-  try {
-    user.find({ role: "Student" }).sort({fullName: 1}).exec((err, students) => {
-      if (err) {
-        return res.status(400).json({
-          errorMessage: 'Something went wrong!',
-          status: false
-        });
-      }
 
-      if (!students || students.length === 0) {
-        return res.status(404).json({
-          errorMessage: 'No students found!',
-          status: false
-        });
-      }
-      return res.status(200).json({
-        status: true,
-        students: students
-      });
-
-    })
-  } catch (e) {
-    res.status(400).json({
-      errorMessage: 'Something went wrong!',
-      status: false
-    });
-  }
-});
 
 /* Api to get all tutors sorted by full name */
 app.get("/get-tutors", (req, res) => {
   try {
-    user.find({ role: "Tutor" }).sort({fullName: 1}).exec((err, tutors) => {
+    user.find({ role: "Tutor" }).sort({ fullName: 1 }).exec((err, tutors) => {
       if (err) {
         return res.status(400).json({
           errorMessage: 'Something went wrong!',
@@ -391,12 +379,12 @@ app.get("/get-tutors", (req, res) => {
           status: false
         });
       }
-     
+
       return res.status(200).json({
-       
+
         status: true,
         tutors: tutors,
-       
+
       });
 
     })
@@ -409,77 +397,81 @@ app.get("/get-tutors", (req, res) => {
 });
 
 
+
 /*Api to get and search session with pagination and search by name*/
-app.get("/get-session", (req, res) => {
-  try {
-    var query = {};
-    query["$and"] = [];
-    query["$and"].push({
-      is_delete: false,
-      user_id: req.user.id
-    });
-    if (req.query && req.query.search) {
-      query["$and"].push({
-        name: { $regex: new RegExp(req.query.search, "i") }
-      });
-    } else if (req.query && req.query.searchByTutor) {
-      query["$and"].push({
-        tutor: { $regex: new RegExp(req.query.searchByTutor, "i") }
-      });
-    }
-    var perPage = 7;
-    var page = req.query.page || 1;
-    session
-      .find(query, {
-        date: 1,
-        name: 1,
-        id: 1,
-        comments: 1,
-        taskAssignment: 1,
-        date: 1,
-        subject: 1,
-        attendance: 1,
-        hours: 1,
-        tutor: 1
-      })
-      .sort({ date: -1 }) // Sorting in descending order
-      .skip((perPage * page) - perPage)
-      .limit(perPage)
-      .then((data) => {
-        session
-          .find(query)
-          .count()
-          .then((count) => {
-            if (data && data.length > 0) {
-              res.status(200).json({
-                status: true,
-                title: "Session retrieved.",
-                sessions: data,
-                current_page: page,
-                total: count,
-                pages: Math.ceil(count / perPage),
-              });
-            } else {
-              res.status(400).json({
-                errorMessage: "There is no session!",
-                status: false
-              });
-            }
-          });
-      })
-      .catch((err) => {
-        res.status(400).json({
-          errorMessage: err.message || err,
-          status: false
-        });
-      });
-  } catch (e) {
-    res.status(400).json({
-      errorMessage: "Something went wrong!",
-      status: false
-    });
-  }
+app.get("/get-session", (req, res) => {	
+  try {	
+    var query = {};	
+    query["$and"] = [];	
+    query["$and"].push({	
+      is_delete: false,	
+      user_id: req.user.id	
+    });	
+    if (req.query && req.query.search) {	
+      query["$and"].push({	
+        name: { $regex: new RegExp(req.query.search, "i") }	
+      });	
+    } else if (req.query && req.query.searchByTutor) {	
+      query["$and"].push({	
+        tutor: { $regex: new RegExp(req.query.searchByTutor, "i") }	
+      });	
+    }	
+    var perPage = 7;	
+    var page = req.query.page || 1;	
+    session	
+      .find(query, {	
+        date: 1,	
+        name: 1,	
+        id: 1,	
+        comments: 1,	
+        taskAssignment: 1,	
+        date: 1,	
+        subject: 1,	
+        attendance: 1,	
+        hours: 1,	
+        tutor: 1	
+      })	
+      .sort({ date: -1 }) // Sorting in descending order	
+      .skip((perPage * page) - perPage)	
+      .limit(perPage)	
+      .then((data) => {	
+        session	
+          .find(query)	
+          .count()	
+          .then((count) => {	
+            if (data && data.length > 0) {	
+              res.status(200).json({	
+                status: true,	
+                title: "Session retrieved.",	
+                sessions: data,	
+                current_page: page,	
+                total: count,	
+                pages: Math.ceil(count / perPage),	
+              });	
+            } else {	
+              res.status(400).json({	
+                errorMessage: "There is no session!",	
+                status: false	
+              });	
+            }	
+          });	
+      })	
+      .catch((err) => {	
+        res.status(400).json({	
+          errorMessage: err.message || err,	
+          status: false	
+        });	
+      });	
+  } catch (e) {	
+    res.status(400).json({	
+      errorMessage: "Something went wrong!",	
+      status: false	
+    });	
+  }	
 });
+
+
+
 
 /*Api to get and search users with pagination and search by username*/
 app.get("/get-users", (req, res) => {
@@ -488,9 +480,9 @@ app.get("/get-users", (req, res) => {
     if (req.query && req.query.search) {
       query["fullName"] = { $regex: req.query.search };
     }
-    var perPage = 7;
+    var perPage = 8;
     var page = req.query.page || 1;
-    user.find(query, { username: 1, fullName: 1, role: 1,password: 1, project: 1 })
+    user.find(query, { username: 1, fullName: 1, role: 1, password: 1, project: 1 })
       .skip((perPage * page) - perPage).limit(perPage)
       .then((data) => {
         user.countDocuments(query)
@@ -562,30 +554,29 @@ app.post("/delete-users", (req, res) => {
 
 /* Api to update users */
 app.post("/update-users", (req, res) => {
-  
+
   try {
     if (req.body && req.body.id) {
       var update = {};
 
-      if(req.body.username) {
+      if (req.body.username) {
         update.username = req.body.username;
       }
-      if(req.body.fullName) {
+      if (req.body.fullName) {
         update.fullName = req.body.fullName;
       }
-      if(req.body.role) {
+      if (req.body.role) {
         update.role = req.body.role;
       }
-      if(req.body.password) {
+      if (req.body.password) {
         update.password = req.body.password;
       }
-      if(req.body.project) {
+      if (req.body.project) {
         update.project = req.body.project;
       }
-      
 
       user.findByIdAndUpdate(req.body.id, update, { new: true }, (err, data) => {
-        
+
         if (err) {
           res.status(400).json({
             errorMessage: 'Error updating user.',
@@ -618,11 +609,12 @@ app.get("/get-students", (req, res) => {
   try {
     var query = {};
     if (req.query && req.query.search) {
-      query["fullName"] = { $regex: req.query.search };
+      query["name"] = { $regex: new RegExp(req.query.search, "i") };
     }
+
     var perPage = 8;
     var page = req.query.page || 1;
-    student.find(query, { name: 1, tutor: 1, grade: 1, averageMark: 1})
+    student.find(query, { name: 1,  grade: 1, averageMark: 1, date: 1 })
       .skip((perPage * page) - perPage).limit(perPage)
       .then((data) => {
         student.countDocuments(query)
@@ -632,7 +624,7 @@ app.get("/get-students", (req, res) => {
               res.status(200).json({
                 status: true,
                 title: 'Student retrieved.',
-                users: data,
+                students: data, 
                 current_page: page,
                 total: count,
                 pages: Math.ceil(count / perPage),
@@ -662,7 +654,7 @@ app.get("/get-students", (req, res) => {
 });
 
 
-app.get('/weekly-hours/:tutor', function(req, res) {
+app.get('/weekly-hours/:tutor', function (req, res) {
   var tutorName = req.params.tutor;
 
   var today = new Date();
@@ -674,26 +666,26 @@ app.get('/weekly-hours/:tutor', function(req, res) {
   lastDayOfWeek.setHours(23, 59, 59, 999); // end of the day
 
   session.aggregate([
-      {
-          $match: {
-              tutor: tutorName,
-              date: { $gte: firstDayOfWeek, $lte: lastDayOfWeek },
-              is_delete: false
-          }
-      },
-      {
-          $group: {
-              _id: null,
-              totalHours: { $sum: "$hours" }
-          }
+    {
+      $match: {
+        tutor: tutorName,
+        date: { $gte: firstDayOfWeek, $lte: lastDayOfWeek },
+        is_delete: false
       }
-  ]).then(function(result) { 
-    
+    },
+    {
+      $group: {
+        _id: null,
+        totalHours: { $sum: "$hours" }
+      }
+    }
+  ]).then(function (result) {
 
-      res.json(result);
-  }).catch(function(err){
+
+    res.json(result);
+  }).catch(function (err) {
     console.error(err); // Add this line
-      res.send(err);
+    res.send(err);
   });
 });
 
@@ -704,12 +696,12 @@ app.post("/update-payRate", (req, res) => {
     if (req.body && req.body.id) {
       var update = {};
 
-      if(req.body.payRate) {
+      if (req.body.payRate) {
         update.payRate = req.body.payRate;
       }
 
       tutor.findByIdAndUpdate(req.body.id, update, { new: true }, (err, data) => {
-        
+
         if (err) {
           res.status(400).json({
             errorMessage: 'Error updating Pay Rate.',
@@ -740,9 +732,10 @@ app.post("/update-payRate", (req, res) => {
 //Api to get Tutor Scheme
 app.get("/get-tutorsInfo", (req, res) => {
   try {
-    tutor.find({}, { name: 1, payRate: 1, weeklyHours: 1, monthlyHours: 1, yearlyHours: 1, weeklyEarnings: 1, monthlyEarnings: 1,yearlyEarnings: 1})
+    tutor.find({}, { name: 1, payRate: 1, weeklyHours: 1, monthlyHours: 1, yearlyHours: 1, weeklyEarnings: 1, monthlyEarnings: 1,yearlyEarnings: 1})	
       .then((data) => {
-        
+
+
         if (data && data.length > 0) {
           res.status(200).json({
             status: true,
@@ -770,8 +763,8 @@ app.get("/get-tutorsInfo", (req, res) => {
   }
 });
 
-app.get('/monthly-hours/:tutor', function(req, res) {
-  
+app.get('/monthly-hours/:tutor', function (req, res) {
+
   var tutorName = req.params.tutor;
 
   var today = new Date();
@@ -782,27 +775,27 @@ app.get('/monthly-hours/:tutor', function(req, res) {
   lastDayOfMonth.setHours(23, 59, 59, 999); // end of the day
 
   session.aggregate([
-      {
-          $match: {
-              tutor: tutorName,
-              date: { $gte: firstDayOfMonth, $lte: lastDayOfMonth },
-              is_delete: false
-          }
-      },
-      {
-          $group: {
-              _id: null,
-              totalHours: { $sum: "$hours" }
-          }
-          
+    {
+      $match: {
+        tutor: tutorName,
+        date: { $gte: firstDayOfMonth, $lte: lastDayOfMonth },
+        is_delete: false
       }
-      
-  ]).then(function(result) { 
-    
-      res.json(result);
-  }).catch(function(err){
-      console.error(err);
-      res.send(err);
+    },
+    {
+      $group: {
+        _id: null,
+        totalHours: { $sum: "$hours" }
+      }
+
+    }
+
+  ]).then(function (result) {
+
+    res.json(result);
+  }).catch(function (err) {
+    console.error(err);
+    res.send(err);
   });
 });
 
@@ -881,8 +874,8 @@ app.delete("/delete-tutor", (req, res) => {
   }
 });
 
-app.get('/yearly-hours/:tutor', function(req, res) {
-  
+app.get('/yearly-hours/:tutor', function (req, res) {
+
   var tutorName = req.params.tutor;
 
   var today = new Date();
@@ -893,26 +886,27 @@ app.get('/yearly-hours/:tutor', function(req, res) {
   lastDayOfYear.setHours(23, 59, 59, 999); // end of the day
 
   session.aggregate([
-      {
-          $match: {
-              tutor: tutorName,
-              date: { $gte: firstDayOfYear, $lte: lastDayOfYear },
-              is_delete: false
-          }
-      },
-      {
-          $group: {
-              _id: null,
-              totalHours: { $sum: "$hours" }
-          }
-          
+    {
+      $match: {
+        tutor: tutorName,
+        date: { $gte: firstDayOfYear, $lte: lastDayOfYear },
+        is_delete: false
       }
-      
-  ]).then(function(result) { 
-      res.json(result);
-  }).catch(function(err){
-      console.error(err);
-      res.send(err);
+    },
+    {
+      $group: {
+        _id: null,
+        totalHours: { $sum: "$hours" }
+      }
+
+    }
+
+  ]).then(function (result) {
+    console.log(result)
+    res.json(result);
+  }).catch(function (err) {
+    console.error(err);
+    res.send(err);
   });
 });
 
@@ -922,27 +916,27 @@ app.post("/update-tutor-details", (req, res) => {
     if (req.body && req.body.name) {
       var update = {};
 
-      if(req.body.weeklyHours) {
+      if (req.body.weeklyHours) {
         update.weeklyHours = req.body.weeklyHours;
       }
 
-      if(req.body.monthlyHours) {
+      if (req.body.monthlyHours) {
         update.monthlyHours = req.body.monthlyHours;
       }
 
-      if(req.body.yearlyHours) {
+      if (req.body.yearlyHours) {
         update.yearlyHours = req.body.yearlyHours;
       }
 
-      if(req.body.weeklyEarnings) {
+      if (req.body.weeklyEarnings) {
         update.weeklyEarnings = req.body.weeklyEarnings;
       }
 
-      if(req.body.monthlyEarnings) {
+      if (req.body.monthlyEarnings) {
         update.monthlyEarnings = req.body.monthlyEarnings;
       }
 
-      if(req.body.yearlyEarnings) {
+      if (req.body.yearlyEarnings) {
         update.yearlyEarnings = req.body.yearlyEarnings;
       }
 
