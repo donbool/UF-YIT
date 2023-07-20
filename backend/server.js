@@ -167,6 +167,9 @@ app.post("/register", (req, res) => {
                   name: req.body.fullName,
                   grade: req.body.grade,
                   averageMark: 0,
+                  comments: "",
+                  benchmarks: "",
+                  marks: "",
                 });
                 newStudent.save((err, data) => {
                   if (err) {
@@ -653,6 +656,56 @@ app.get("/get-students", (req, res) => {
 
 });
 
+// API to update students via save button
+app.post("/update-students", upload.any(), (req, res) => {
+  try {
+    if (req.body && req.body.comments && req.body.marks &&
+      req.body.id && req.body.benchmarks && req.body.grade) {
+
+      student.findById(req.body.id, (err, new_student) => {
+
+        if (req.body.comments) {
+          new_student.comments = req.body.comments;
+        }
+        if (req.body.marks) {
+          new_student.marks = req.body.marks;
+        }
+        if (req.body.benchmarks) {
+          new_student.benchmarks = req.body.benchmarks;
+        }
+        if (req.body.grade) {
+          new_student.grade = req.body.grade;
+        }
+
+        new_student.save((err, data) => {
+          if (err) {
+            res.status(400).json({
+              errorMessage: err,
+              status: false
+            });
+          } else {
+            res.status(200).json({
+              status: true,
+              title: 'Student updated.'
+            });
+          }
+        });
+
+      });
+
+    } else {
+      res.status(400).json({
+        errorMessage: 'Add proper parameter first!',
+        status: false
+      });
+    }
+  } catch (e) {
+    res.status(400).json({
+      errorMessage: 'Something went wrong!',
+      status: false
+    });
+  }
+});
 
 app.get('/weekly-hours/:tutor', function (req, res) {
   var tutorName = req.params.tutor;
